@@ -10,9 +10,8 @@ import cse332.interfaces.worklists.WorkList;
 import datastructures.worklists.ArrayStack;
 
 /**
- * BinarySearchTree implements the DataCounter interface using a binary search
- * tree. The constructor takes a Comparator<? super E> "function object" so that
- * items of type E can be compared. Each tree node associates a count with an E.
+ * BinarySearchTree implements the ComparableDictionary interface using a binary
+ * search tree. Notice that the key type must be Comparable.
  */
 public class BinarySearchTree<K extends Comparable<K>, V>
         extends ComparableDictionary<K, V> {
