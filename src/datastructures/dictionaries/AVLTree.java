@@ -6,7 +6,7 @@ import cse332.datastructures.trees.BinarySearchTree;
  * TODO: Replace this comment with your own as appropriate.
  *
  * AVLTree must be a subclass of BinarySearchTree<E> and must use
- * inheritance and callst o superclass methodst o avoid unnecessary
+ * inheritance and callst o superclass methods to avoid unnecessary
  * duplication or copying of functionality.
  *
  * 1. Create a subclass of BSTNode, perhaps named AVLNode.
@@ -24,7 +24,7 @@ import cse332.datastructures.trees.BinarySearchTree;
  *    penalized.
  * 5. Cast children array to AVLNode whenever necessary in your
  *    AVLTree. This will result a lot of casts, so we recommend you make
- *    private methodst hat encapsulatet hose casts.
+ *    private methods that encapsulate those casts.
  * 6. Do NOT override the toString method. It is used for grading.
  */
 
