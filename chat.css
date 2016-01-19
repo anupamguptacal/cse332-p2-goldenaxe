@@ -1,0 +1,29 @@
+body {
+    font-family: "Georgia";
+    font-size: 12px;
+    overflow-x: hidden;
+}
+
+div {
+    word-wrap: break-word;
+}
+
+.from-me {
+    position: relative;
+    padding: 2px 5px;
+    color: white;
+    background: #0B93F6;
+    border-radius: 5px;
+    max-width: 80%;
+    float: right;
+}
+
+.from-them {
+    position: relative;
+    padding: 2px 5px;
+    background: #E5E5EA;
+    border-radius: 5px;
+    color: black;
+    float: left;
+    max-width: 80%;  
+}
