@@ -31,7 +31,7 @@ public class BinarySearchTree<K extends Comparable<K>, V>
      * type E and an integer count. The class is protected so that subclasses of
      * BinarySearchTree can access it.
      */
-    protected class BSTNode extends Item<K, V> {
+    public class BSTNode extends Item<K, V> {
         public BSTNode[] children; // The children of this node.
 
         /**
