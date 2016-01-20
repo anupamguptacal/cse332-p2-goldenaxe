@@ -1,9 +1,7 @@
 package tests.gitlab.ckpt2;
 
-import cse332.datastructures.*;
 import cse332.datastructures.containers.Item;
 import cse332.datastructures.trees.BinarySearchTree.BSTNode;
-import cse332.interfaces.*;
 import cse332.interfaces.misc.Dictionary;
 import datastructures.dictionaries.AVLTree;
 import tests.TestsUtility;

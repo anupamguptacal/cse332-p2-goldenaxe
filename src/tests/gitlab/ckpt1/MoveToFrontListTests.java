@@ -2,12 +2,9 @@ package tests.gitlab.ckpt1;
 
 import java.util.Arrays;
 
-import cse332.datastructures.*;
 import cse332.datastructures.containers.Item;
-import cse332.interfaces.*;
 import datastructures.dictionaries.MoveToFrontList;
 import tests.TestsUtility;
-import tests.exceptions.InformativeException;
 
 public class MoveToFrontListTests extends TestsUtility {
     public static void main(String[] args) {
