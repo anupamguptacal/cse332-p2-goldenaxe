@@ -6,7 +6,7 @@ import java.util.Iterator;
 import cse332.interfaces.worklists.FixedSizeFIFOWorkList;
 import datastructures.worklists.CircularArrayFIFOQueue;
 
-public abstract class BString<Alphabet extends Comparable<Alphabet> implements Iterable<Alphabet>, Comparable<BString<Alphabet>> {
+public abstract class BString<Alphabet extends Comparable<Alphabet>> implements Iterable<Alphabet>, Comparable<BString<Alphabet>> {
     protected FixedSizeFIFOWorkList<Alphabet> str;
 
     public BString(Alphabet[] str) {
@@ -26,7 +26,7 @@ public abstract class BString<Alphabet extends Comparable<Alphabet> implements I
     }
 
     @SuppressWarnings("unchecked")
-    public static <A, X extends BString<A>> Class<A> getLetterType(Class<X> clz) {
+    public static <A extends Comparable<A>, X extends BString<A>> Class<A> getLetterType(Class<X> clz) {
         try {
             return (Class<A>) clz.getMethod("getLetterType", (Class<?>[]) null)
                     .invoke(null, (Object[]) null);
