@@ -12,8 +12,7 @@ import datastructures.dictionaries.HashTrieMap;
 import p2.wordsuggestor.WordSuggestor;
 
 public class NGramTester {
-    public static <A, K extends BString<A>, V> Supplier<Dictionary<K, V>> trieConstructor(
-            Class<K> clz) {
+    public static <A extends Comparable<A>, K extends BString<A>, V> Supplier<Dictionary<K, V>> trieConstructor(Class<K> clz) {
         return () -> new HashTrieMap<A, K, V>(clz);
     }
 

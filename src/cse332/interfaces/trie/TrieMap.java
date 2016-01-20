@@ -30,7 +30,7 @@ import datastructures.worklists.ListFIFOQueue;
  *
  * @author Adam Blank
  */
-public abstract class TrieMap<A, K extends BString<A>, V> extends Dictionary<K, V> {
+public abstract class TrieMap<A extends Comparable<A>, K extends BString<A>, V> extends Dictionary<K, V> {
     protected TrieNode<?, ?> root;
 
     /**
