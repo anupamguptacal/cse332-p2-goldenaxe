@@ -7,7 +7,6 @@ import cse332.interfaces.*;
 import cse332.interfaces.misc.Dictionary;
 import datastructures.dictionaries.AVLTree;
 import tests.TestsUtility;
-import tests.datastructures.IntegerComparator;
 
 public class AVLTreeTests extends TestsUtility {
 	
