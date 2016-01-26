@@ -37,7 +37,9 @@ public class BinarySearchTree<K extends Comparable<K>, V>
         /**
          * Create a new data node and increment the enclosing tree's size.
          *
-         * @param data
+         * @param key
+         *            key with which the specified value is to be associated
+         * @param value
          *            data element to be stored at this node.
          */
         @SuppressWarnings("unchecked")
@@ -71,7 +73,7 @@ public class BinarySearchTree<K extends Comparable<K>, V>
             }
         }
 
-        // If value is null, we need to actually add in the new value
+        // If value is not null, we need to actually add in the new value
         if (value != null) {
             current = new BSTNode(key, value);
             if (this.root == null) {
