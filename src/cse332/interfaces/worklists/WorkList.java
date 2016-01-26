@@ -89,22 +89,23 @@ public abstract class WorkList<E> implements Iterable<E> {
     }
 
     /**
-     * Note that the toString() method of a WorkList _consumes_ the WorkList.
-     * This can lead to odd and unpredictable behavior.
-     * 
-     * @postcondition hasWork() is false
+     * Returns some basic information about this particular worklist.
+     *
+     * Calling this method does not consume the worklist.
+     *
+     * @return a string representation of this worklist
      */
     @Override
     public String toString() {
-        StringBuilder result = new StringBuilder();
-        result.append("[");
-        while (this.hasWork()) {
-            result.append(this.next().toString() + ", ");
+        if (this.hasWork()) {
+            return String.format("%s(size = %d, peek = %s)",
+                    this.getClass().getSimpleName(),
+                    this.size(),
+                    this.peek());
+        } else {
+            return String.format("%s(size = %d)",
+                    this.getClass().getSimpleName(),
+                    this.size());
         }
-        if (result.length() > 1) {
-            result.replace(result.length() - 2, result.length(), "");
-        }
-        result.append("]");
-        return result.toString();
     }
 }
