@@ -58,9 +58,6 @@ public class BinarySearchTree<K extends Comparable<K>, V>
 
             // We found the key!
             if (direction == 0) {
-                if (value != null) {
-                    current.value = value;
-                }
                 return current;
             }
             else {
@@ -73,7 +70,7 @@ public class BinarySearchTree<K extends Comparable<K>, V>
 
         // If value is null, we need to actually add in the new value
         if (value != null) {
-            current = new BSTNode(key, value);
+            current = new BSTNode(key, null);
             if (this.root == null) {
                 this.root = current;
             }
@@ -99,7 +96,10 @@ public class BinarySearchTree<K extends Comparable<K>, V>
 
     @Override
     public V insert(K key, V value) {
-        return find(key, value).value;
+        BSTNode current = find(key, value);
+        V oldValue = current.value;
+        current.value = value;
+        return oldValue;
     }
 
     @Override
