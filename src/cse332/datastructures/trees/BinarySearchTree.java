@@ -35,7 +35,7 @@ public class BinarySearchTree<K extends Comparable<K>, V>
         public BSTNode[] children; // The children of this node.
 
         /**
-         * Create a new data node and increment the enclosing tree's size.
+         * Create a new data node.
          *
          * @param key
          *            key with which the specified value is to be associated
