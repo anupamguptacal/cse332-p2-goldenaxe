@@ -13,7 +13,8 @@ public class Ckpt2Tests extends GradingUtility {
             HashTableTests.class,
             CircularArrayHashCodeTests.class,
             QuickSortTests.class,
-            TopKSortTests.class
+            TopKSortTests.class,
+            HeapSortTests.class
         };
     }
 }
