@@ -11,7 +11,10 @@ public class Ckpt2Tests extends GradingUtility {
         return new Class<?>[] {
             AVLTreeTests.class,
             HashTableTests.class,
-            CircularArrayHashCodeTests.class
+            CircularArrayHashCodeTests.class,
+            QuickSortTests.class,
+            TopKSortTests.class,
+            HeapSortTests.class
         };
     }
 }
