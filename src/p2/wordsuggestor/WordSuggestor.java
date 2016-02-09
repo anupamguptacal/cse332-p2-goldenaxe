@@ -73,6 +73,12 @@ public class WordSuggestor {
             words[i] = allWords.next();
             i--;
         }
+       
+        for (i = 0; i < words.length; i++) {
+            if (words[i] == null) {
+                words[i] = "NULL";
+            }
+        }
 
         return new NGram(words);
     }
