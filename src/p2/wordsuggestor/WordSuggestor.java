@@ -67,7 +67,7 @@ public class WordSuggestor {
             allWords.add(reader.next());
         }
 
-        String[] words = new String[N];
+        String[] words = new String[allWords.size()];
         int i = words.length - 1;
         while (i >= 0 && allWords.hasWork()) {
             words[i] = allWords.next();
