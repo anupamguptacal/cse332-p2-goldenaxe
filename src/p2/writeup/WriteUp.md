@@ -66,7 +66,7 @@ there a clear winner?  Why or why not?  Is the winner surprising to you?
 <pre>TODO</pre>
 
 ### General Sorts ###
-You have several general purpose sorts (InsertionSort, HeapSort, TopKSort).  We would like you to compare these
+You have several general purpose sorts (InsertionSort, HeapSort, QuickSort).  We would like you to compare these
 sorts using *step counting*. That is, for all other experiments, you likely compared the time it took for the various
 things to run, but for this one, we want you to (1) choose a definition of step, (2) modify the sorting algorithms to
 calculate the number of steps, and (3) compare the results.  In this case, there is a "good" definition of step, and
