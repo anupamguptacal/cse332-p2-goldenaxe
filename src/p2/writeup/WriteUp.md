@@ -83,7 +83,7 @@ experiment.
 Use uMessage to test out your implementations.  Using N=3, uMessage should take less than a minute to load using
 your best algorithms and data structures on a reasonable machine.
 
- -  How are the suggestions uMessage gives with the default corpus?
+ -  How are the suggestions uMessage gives with the default corpus? (here, we mean spoken.corpus or irc.corpus, not eggs.txt)
     <pre>TODO</pre>
 
  - Now, switch uMessage to use a corpus of YOUR OWN text. To do this, you will need a corpus. 
