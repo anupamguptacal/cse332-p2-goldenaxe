@@ -3,10 +3,12 @@ package p2.clients;
 import java.io.IOException;
 import java.util.function.Supplier;
 
+import cse332.datastructures.trees.BinarySearchTree;
 import cse332.interfaces.misc.BString;
 import cse332.interfaces.misc.Dictionary;
 import cse332.types.AlphabeticString;
 import cse332.types.NGram;
+import datastructures.dictionaries.AVLTree;
 import datastructures.dictionaries.ChainingHashTable;
 import datastructures.dictionaries.HashTrieMap;
 import p2.wordsuggestor.WordSuggestor;
@@ -20,6 +22,17 @@ public class NGramTester {
             Supplier<Dictionary<K, V>> constructor) {
         return () -> new ChainingHashTable<K, V>(constructor);
     }
+    
+    @SuppressWarnings({ "rawtypes", "unchecked" })
+    public static <K, V> Supplier<Dictionary<K, V>> binarySearchTreeConstructor() {
+        return () -> new BinarySearchTree();
+    }
+    
+    @SuppressWarnings({ "rawtypes", "unchecked" })
+    public static <K, V> Supplier<Dictionary<K, V>> avlTreeConstructor() {
+        return () -> new AVLTree();
+    }
+
 
     public static void main(String[] args) {
         try {
