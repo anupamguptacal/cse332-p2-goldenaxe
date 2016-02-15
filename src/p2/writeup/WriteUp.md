@@ -93,7 +93,7 @@ your best algorithms and data structures on a reasonable machine.
    Alternatively, you can concatenate a bunch of English papers you've written together to get a corpus
    of your writing.  PLEASE DO NOT INCLUDE "me.txt" IN YOUR REPOSITORY.  WE DO NOT WANT YOUR PRIVATE CONVERSATIONS.
      * Follow these instructions to get your Facebook data: https://www.facebook.com/help/212802592074644
-     * Run the ParseFBMessages program in the main package.
+     * Run the ParseFBMessages program in the p2.wordsuggestor package.
      * Use the output file "me.txt" as the corpus for uMessage.
  
  - How are the suggestions uMessage gives wth the new corpus?
