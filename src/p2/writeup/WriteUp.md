@@ -36,18 +36,13 @@ Throughout p1 and p2, you have written (or used) several distinct implementation
  - Include your data either directly in the write-up or in the experiments folder
  - If you think it helps your explanation, you can include graphs of the outputs (we recommend that you do this for some of them)
  - We recommend that you keep your "N" (as in "N-gram") constant throughout these experiments. (N = 2 and N = 3 are reasonable.) 
- 
+
+
 ### BST vs. AVLTree ###
 Construct input files to NGramTester of your choosing to demonstrate that an AVL Tree is asymptotically better
 than a Binary Search Tree.
 <pre>TODO</pre>
 
-### BST Worst Case vs. BST Best Case ###
-We know that the worst case for a BST insertion is O(n) and the best case is O(lg n).  Construct input
-files of your choosing that demonstrate these best and worst cases for a large n.  How big is the difference?
-Is it surprising?
-<pre>TODO</pre>
- 
 ### ChainingHashTable ###
 Your ChainingHashTable should take as an argument to its constructor the type of "chains" it uses.  Determine
 which type of chain is (on average) best: an MTFList, a BST, or an AVL Tree.  Explain your intuition on why
@@ -61,20 +56,12 @@ hash function make?  (You should keep all other inputs (e.g., the chain type) co
 <pre>TODO</pre>
 
 ### General Purpose Dictionary ###
-Compare all of the dictionaries (on their best settings, as determined above) on several large input files.  Is
+Compare BST, AVLTree, ChainingHashTable, and HashTrieMap on alice.txt.  Is
 there a clear winner?  Why or why not?  Is the winner surprising to you?
 <pre>TODO</pre>
 
-### General Sorts ###
-You have several general purpose sorts (InsertionSort, HeapSort, QuickSort).  We would like you to compare these
-sorts using *step counting*. That is, for all other experiments, you likely compared the time it took for the various
-things to run, but for this one, we want you to (1) choose a definition of step, (2) modify the sorting algorithms to
-calculate the number of steps, and (3) compare the results.  In this case, there is a "good" definition of step, and
-there are many bad ones.  We expect you to justify your choice.
-<pre>TODO</pre>
-
 ### Top K Sort ###
-TopKSort should theoretically be better for small values of k.  Determine (using timing or step-counting--your choice)
+TopKSort should theoretically be better than HeapSort for small values of k.  Determine (using timing)
 which n (input size) and k (number of elements sorted) makes TopKSort worthwhile over your best sort from the previous
 experiment. 
 <pre>TODO</pre>
@@ -83,7 +70,7 @@ experiment.
 Use uMessage to test out your implementations.  Using N=3, uMessage should take less than a minute to load using
 your best algorithms and data structures on a reasonable machine.
 
- -  How are the suggestions uMessage gives with the default corpus? (here, we mean spoken.corpus or irc.corpus, not eggs.txt)
+ -  How are the suggestions uMessage gives with the default corpus? (here we mean spoken.corpus or irc.corpus, not eggs.txt)
     <pre>TODO</pre>
 
  - Now, switch uMessage to use a corpus of YOUR OWN text. To do this, you will need a corpus. 
