@@ -44,26 +44,16 @@ than a Binary Search Tree.
 <pre>TODO</pre>
 
 ### ChainingHashTable ###
-Your ChainingHashTable should take as an argument to its constructor the type of "chains" it uses.  Determine
-which type of chain is (on average) best: an MTFList, a BST, or an AVL Tree.  Explain your intuition on why
-the answer you got makes sense (or doesn't!). 
+Your ChainingHashTable takes as an argument to its constructor the type of "chains" it uses.  Which type
+of chain between MTFList, BST, and AVL Tree do you think works best on average?  For this question, we
+only want your intuition.  (There are no wrong answers here as long as you back up your answer.)  You
+do not need to actually do an experiment, but you are welcome to if you like.
 <pre>TODO</pre>
  
 ### Hash Functions ###
 Write a new hash function (it doesn't have to be any good, but remember to include the code in your repository).
 Compare the runtime of your ChainingHashTable when the hash function is varied.  How big of a difference can the
 hash function make?  (You should keep all other inputs (e.g., the chain type) constant.)
-<pre>TODO</pre>
-
-### General Purpose Dictionary ###
-Compare BST, AVLTree, ChainingHashTable, and HashTrieMap on alice.txt.  Is
-there a clear winner?  Why or why not?  Is the winner surprising to you?
-<pre>TODO</pre>
-
-### Top K Sort ###
-TopKSort should theoretically be better than HeapSort for small values of k.  Determine (using timing)
-which n (input size) and k (number of elements sorted) makes TopKSort worthwhile over your best sort from the previous
-experiment. 
 <pre>TODO</pre>
 
 ### uMessage ###
