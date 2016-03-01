@@ -36,11 +36,14 @@ Throughout p1 and p2, you have written (or used) several distinct implementation
  - Include your data either directly in the write-up or in the experiments folder
  - If you think it helps your explanation, you can include graphs of the outputs (we recommend that you do this for some of them)
  - We recommend that you keep your "N" (as in "N-gram") constant throughout these experiments. (N = 2 and N = 3 are reasonable.) 
+ - You should probably run multiple trials for each data point to help remove outliers.
 
 
 ### BST vs. AVLTree ###
 Construct input files to NGramTester of your choosing to demonstrate that an AVL Tree is asymptotically better
-than a Binary Search Tree.
+than a Binary Search Tree. To do this, we expect you to show a trend.  You might consider fitting a curve to
+your results as well. Explain your intuition on why your results are what they are.
+
 <pre>TODO</pre>
 
 ### ChainingHashTable ###
@@ -53,7 +56,8 @@ do not need to actually do an experiment, but you are welcome to if you like.
 ### Hash Functions ###
 Write a new hash function (it doesn't have to be any good, but remember to include the code in your repository).
 Compare the runtime of your ChainingHashTable when the hash function is varied.  How big of a difference can the
-hash function make?  (You should keep all other inputs (e.g., the chain type) constant.)
+hash function make?  (You should keep all other inputs (e.g., the chain type) constant.)  Explain your intuition on
+why your results are what they are.
 <pre>TODO</pre>
 
 ### uMessage ###
