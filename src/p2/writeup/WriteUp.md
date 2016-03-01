@@ -40,9 +40,9 @@ Throughout p1 and p2, you have written (or used) several distinct implementation
 
 
 ### BST vs. AVLTree ###
-Construct input files to NGramTester of your choosing to demonstrate that an AVL Tree is asymptotically better
-than a Binary Search Tree. To do this, we expect you to show a trend.  You might consider fitting a curve to
-your results as well. Explain your intuition on why your results are what they are.
+Construct input files for BST and AVLTree to demonstrate that an AVL Tree is asymptotically better
+than a Binary Search Tree. To do this, we expect you to show trends.  You might consider fitting a curve to
+your results. Explain your intuition on why your results are what they are.
 
 <pre>TODO</pre>
 
