@@ -100,24 +100,7 @@ public class ChatWindow {
     /**
      * Initialize the contents of the frame.
      */
-    private void initialize() {
-        try {
-            String path = new java.io.File(".").getCanonicalPath();
-            this.content.append("<link rel='stylesheet' type='text/css' href='file:///"
-                    + path + "/chat.css'>");
-            this.content.append("<head>");
-            this.content.append(
-                    "   <script language=\"javascript\" type=\"text/javascript\">");
-            this.content.append("       function toBottom(){");
-            this.content
-                    .append("           window.scrollTo(0, document.body.scrollHeight);");
-            this.content.append("       }");
-            this.content.append("   </script>");
-            this.content.append("</head>");
-            this.content.append("<body onload='toBottom()'>");
-        } catch (IOException e1) {
-        }
-
+    private void initialize() { 
         this.frame = new JFrame();
         this.frame.setBounds(100, 100, 290, 390);
         this.frame.setDefaultCloseOperation(WindowConstants.HIDE_ON_CLOSE);
@@ -137,17 +120,28 @@ public class ChatWindow {
         gbc_msgScrollPane.gridx = 0;
         gbc_msgScrollPane.gridy = 0;
 
-        this.chatMessagesPanel = new JFXPanel();
-        this.frame.getContentPane().add(this.chatMessagesPanel, gbc_msgScrollPane);
+        show();
 
-        Platform.runLater(() -> {
-            ChatWindow.this.chatMessages = new WebView();
-
-            BorderPane borderPane = new BorderPane();
-            borderPane.setCenter(ChatWindow.this.chatMessages);
-            Scene scene = new Scene(borderPane, 450, 450);
-            ChatWindow.this.chatMessagesPanel.setScene(scene);
-        });
+        (new Thread() {
+            public void run() {
+                try {
+                    String path = new java.io.File(".").getCanonicalPath();
+                    content.append("<link rel='stylesheet' type='text/css' href='file:///"
+                            + path + "/chat.css'>");
+                    content.append("<head>");
+                    content.append(
+                            "   <script language=\"javascript\" type=\"text/javascript\">");
+                    content.append("       function toBottom(){");
+                    content
+                            .append("           window.scrollTo(0, document.body.scrollHeight);");
+                    content.append("       }");
+                    content.append("   </script>");
+                    content.append("</head>");
+                    content.append("<body onload='toBottom()'>");
+                } catch (IOException e1) {
+                }
+            }
+        }).start();
 
         JPanel suggestionsPanel = new JPanel();
         GridBagConstraints gbc_suggestionsPanel = new GridBagConstraints();
@@ -269,11 +263,29 @@ public class ChatWindow {
             }
         };
         this.frame.addKeyListener(giveFocus);
-        this.chatMessagesPanel.addKeyListener(giveFocus);
         suggestionsPanel.addKeyListener(giveFocus);
         myMessagePanel.addKeyListener(giveFocus);
 
+        (new Thread() {
+            public void run() {
+                chatMessagesPanel = new JFXPanel();
+                chatMessagesPanel.addKeyListener(giveFocus);
+                frame.getContentPane().add(chatMessagesPanel, gbc_msgScrollPane);
+                Platform.runLater(() -> {
+                    ChatWindow.this.chatMessages = new WebView();
+
+                    BorderPane borderPane = new BorderPane();
+                    borderPane.setCenter(ChatWindow.this.chatMessages);
+                    Scene scene = new Scene(borderPane, 450, 450);
+                    ChatWindow.this.chatMessagesPanel.setScene(scene);
+                });
+
+            }
+        }).start();
+
+
         this.frame.pack();
+        show();
         this.myMessage.requestFocusInWindow();
     }
 
@@ -322,13 +334,15 @@ public class ChatWindow {
             String text = ("SOL " + this.myMessage.getText()).trim();
             int lastSpace = text.lastIndexOf(' ');
             String allButLast = lastSpace > -1 ? text.substring(0, lastSpace) : null;
-            this.undo = this.myMessage.getText();
-            String newText = (allButLast.replaceAll("SOL", "") + " " + result).trim();
-            if (this.myMessage.getText().startsWith(newText)) {
-                return false;
+            if (allButLast != null) {
+                this.undo = this.myMessage.getText();
+                String newText = (allButLast.replaceAll("SOL", "") + " " + result).trim();
+                if (this.myMessage.getText().startsWith(newText)) {
+                    return false;
+                }
+                this.myMessage.setText(newText);
+                return true;
             }
-            this.myMessage.setText(newText);
-            return true;
         }
         return false;
     }

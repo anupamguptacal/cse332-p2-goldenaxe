@@ -15,7 +15,6 @@ import javax.swing.JList;
 import p2.wordsuggestor.WordSuggestor;
 
 public class MainWindow {
-
     private JFrame frame;
     private List<String> usernames;
     private final List<ChatWindow> chats;
@@ -51,22 +50,26 @@ public class MainWindow {
         list.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                @SuppressWarnings("unchecked")
-                JList<String> list = (JList<String>) e.getSource();
-                if (e.getClickCount() == 2) {
-                    int index = list.locationToIndex(e.getPoint());
-                    for (ChatWindow client : MainWindow.this.chats) {
-                        if (client.theirUsername
-                                .equals(MainWindow.this.usernames.get(index))) {
-                            client.show();
-                            return;
+                (new Thread() {
+                    public void run() {
+                        @SuppressWarnings("unchecked")
+                        JList<String> list = (JList<String>) e.getSource();
+                        if (e.getClickCount() == 2) {
+                            int index = list.locationToIndex(e.getPoint());
+                            for (ChatWindow client : MainWindow.this.chats) {
+                                if (client.theirUsername
+                                        .equals(MainWindow.this.usernames.get(index))) {
+                                    client.show();
+                                    return;
+                                }
+                            }
+
+                            MainWindow.this.chats
+                                    .add(new ChatWindow(MainWindow.this.usernames.get(index),
+                                            MainWindow.this.markov, MainWindow.this.connection));
                         }
                     }
-
-                    MainWindow.this.chats
-                            .add(new ChatWindow(MainWindow.this.usernames.get(index),
-                                    MainWindow.this.markov, MainWindow.this.connection));
-                }
+                }).start();
             }
         });
 

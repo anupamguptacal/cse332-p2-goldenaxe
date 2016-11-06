@@ -6,16 +6,24 @@ import java.awt.EventQueue;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.awt.BorderLayout;
 import java.io.IOException;
 import java.util.function.Supplier;
 
 import javax.swing.Box;
+import javafx.embed.swing.JFXPanel;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
+import javax.swing.JDialog;
+import javax.swing.JProgressBar;
+import javax.swing.SwingUtilities;
+import javax.swing.SwingWorker;
 
 import cse332.interfaces.misc.Dictionary;
 import cse332.types.AlphabeticString;
@@ -62,35 +70,65 @@ public class uMessage {
         }
 
         @Override
-        public void run() {
-            int N = uMessage.N;
-            try {
-                uMessage.markov[this.i] = new WordSuggestor(uMessage.CORPUS, N - this.i,
-                        4, uMessage.NEW_OUTER, uMessage.NEW_INNER);
-                uMessage.loading[this.i] = false;
-                this.window.update();
-            } catch (IOException e) {
+            public void run() {
+                int N = uMessage.N;
+                try {
+                    uMessage.markov[this.i] = new WordSuggestor(uMessage.CORPUS, N - this.i,
+                            4, uMessage.NEW_OUTER, uMessage.NEW_INNER);
+                    this.window.update();
+                } catch (IOException e) {
+                }
             }
-        }
     }
 
     /**
      * Launch the application.
      */
     public static void main(String[] args) {
-        EventQueue.invokeLater(() -> {
-            final uMessage window = new uMessage();
-            window.frmUmessageLogin.setVisible(true);
-            window.errors.setText("Loading the Markov Data (n = " + uMessage.N + ")...");
-            uMessage.markov = new WordSuggestor[uMessage.N];
-            uMessage.loading = new boolean[uMessage.N];
-            for (int i1 = 0; i1 < uMessage.N; i1++) {
-                uMessage.loading[i1] = true;
+        (new Thread() {
+            public void run() {
+                new JFXPanel();
             }
-            for (int i2 = 0; i2 < uMessage.N; i2++) {
-                new Thread(new MarkovLoader(window, i2)).start();
+        }).start();
+
+        final uMessage window = new uMessage();
+        markov = new WordSuggestor[uMessage.N];
+
+        JDialog dialog = new JDialog((JFrame)null, "Please wait...", true);//true means that the dialog created is modal
+        JLabel lblStatus = new JLabel("<html><b>Loading Markov Data (n = " + uMessage.N + ")...</b><br>Depending on the data structures you're using<br>" + 
+            "and your computer, this might take a bit.</html>"); 
+
+        JProgressBar pbProgress = new JProgressBar(0, 100);
+        pbProgress.setIndeterminate(true); //we'll use an indeterminate progress bar
+
+        dialog.add(BorderLayout.NORTH, lblStatus);
+        dialog.add(BorderLayout.CENTER, pbProgress);
+        dialog.addWindowListener(new WindowAdapter() { 
+            @Override public void windowClosing(WindowEvent e) { 
+              System.exit(0);
             }
         });
+        dialog.setSize(300, 90);
+
+        SwingWorker<Void, Void> sw = new SwingWorker<Void, Void>() {
+            @Override
+            protected Void doInBackground() throws Exception {
+                for (int i2 = 1; i2 < uMessage.N; i2++) {
+                    new Thread(new MarkovLoader(window, i2)).start();
+                }
+                new MarkovLoader(window, 0).run();
+                return null;
+            }
+
+            @Override
+            protected void done() {
+                dialog.dispose();//close the modal dialog
+                window.frmUmessageLogin.setVisible(true);
+            }
+        };
+
+        sw.execute(); // this will start the processing on a separate thread
+        dialog.setVisible(true); //this will block user input as long as the processing task is working
     }
 
     /**
@@ -112,7 +150,7 @@ public class uMessage {
         gridBagLayout.columnWidths = new int[] { 0, 90, 90, 90, 0, 0 };
         gridBagLayout.rowHeights = new int[] { 0, 9, 0, 0 };
         gridBagLayout.columnWeights = new double[] { 0.0, 0.0, 1.0, 0.0, 0.0,
-                Double.MIN_VALUE };
+            Double.MIN_VALUE };
         gridBagLayout.rowWeights = new double[] { 0.0, 0.0, 0.0, Double.MIN_VALUE };
         this.frmUmessageLogin.getContentPane().setLayout(gridBagLayout);
 
@@ -143,10 +181,14 @@ public class uMessage {
         this.username.addKeyListener(new KeyAdapter() {
             @Override
             public void keyReleased(KeyEvent e) {
-                if (update() && e.getKeyCode() == KeyEvent.VK_ENTER) {
-                    uMessage.this.login.setEnabled(false);
-                    login();
-                }
+                (new Thread() {
+                    public void run() {
+                        if (update() && e.getKeyCode() == KeyEvent.VK_ENTER) {
+                            uMessage.this.login.setEnabled(false);
+                            login();
+                        }
+                    }
+                }).start();
             }
         });
 
@@ -187,14 +229,6 @@ public class uMessage {
     }
 
     public boolean update() {
-        boolean noneLoading = true;
-        for (int i = 0; i < uMessage.loading.length; i++) {
-            noneLoading &= !uMessage.loading[i];
-        }
-        if (noneLoading) {
-            this.errors.setText("");
-            this.errors.setForeground(Color.BLACK);
-        }
         if (!this.loggingIn && this.username.getText().length() > 0) {
             this.login.setEnabled(true);
             this.errors.setForeground(Color.BLACK);
@@ -210,11 +244,10 @@ public class uMessage {
         this.loggingIn = true;
         update();
         try {
-            this.connection = new UMessageServerConnection(this,
-                    this.username.getText().replaceAll(" ", ""));
-            this.connection.go();
-        } catch (IOException e1) {
-        }
+            connection = new UMessageServerConnection(uMessage.this,
+                    username.getText().replaceAll(" ", ""));
+            connection.go();
+        } catch (IOException e1) {}
     }
 
     public void badNick() {
@@ -225,19 +258,6 @@ public class uMessage {
     }
 
     public void loggedIn(String username) {
-        boolean noneLoading = false;
-        while (!noneLoading) {
-            noneLoading = true;
-            for (int i = 0; i < uMessage.loading.length; i++) {
-                noneLoading &= !uMessage.loading[i];
-            }
-
-            try {
-                Thread.sleep(200);
-            } catch (InterruptedException e) {
-            }
-        }
-
         this.frmUmessageLogin.dispose();
         this.window = new MainWindow(username, uMessage.markov, this.connection);
         this.loggingIn = false;
