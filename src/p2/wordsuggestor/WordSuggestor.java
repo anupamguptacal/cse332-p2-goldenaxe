@@ -15,7 +15,6 @@ import datastructures.worklists.ArrayStack;
 
 /**
  * An executable that generates text in the style of the provided input file.
- * You will need to modify this file.
  */
 public class WordSuggestor {
     private final int N, K;
