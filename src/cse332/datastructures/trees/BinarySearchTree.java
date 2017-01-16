@@ -49,7 +49,7 @@ public class BinarySearchTree<K extends Comparable<K>, V>
         }
     }
 
-    private BSTNode find(K key, V value) {
+    protected BSTNode find(K key, V value) {
         BSTNode prev = null;
         BSTNode current = this.root;
 
@@ -89,6 +89,9 @@ public class BinarySearchTree<K extends Comparable<K>, V>
 
     @Override
     public V find(K key) {
+        if (key == null) {
+            throw new IllegalArgumentException();
+        }
         BSTNode result = find(key, null);
         if (result == null) {
             return null;
@@ -98,6 +101,9 @@ public class BinarySearchTree<K extends Comparable<K>, V>
 
     @Override
     public V insert(K key, V value) {
+        if (key == null || value == null) {
+            throw new IllegalArgumentException();
+        }
         BSTNode current = find(key, value);
         V oldValue = current.value;
         current.value = value;
