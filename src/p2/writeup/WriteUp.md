@@ -2,19 +2,16 @@
 --------
 
 ## Project Enjoyment ##
-- How Was Your Partnership?
-  <pre>TODO</pre>
-  
-- What was your favorite part of the project?
+- What was your favorite part of the project? Why?
   <pre>TODO</pre>
 
-- What was your least favorite part of the project?
+- What was your least favorite part of the project? Why?
   <pre>TODO</pre>
 
-- How could the project be improved?
+- How could the project be improved? Why?
   <pre>TODO</pre>
 
-- Did you enjoy the project?
+- Did you enjoy the project?  Why or why not?
   <pre>TODO</pre>
     
 -----
@@ -43,7 +40,6 @@ Throughout p1 and p2, you have written (or used) several distinct implementation
 Construct input files for BST and AVLTree to demonstrate that an AVL Tree is asymptotically better
 than a Binary Search Tree. To do this, we expect you to show trends.  You might consider fitting a curve to
 your results. Explain your intuition on why your results are what they are.
-
 <pre>TODO</pre>
 
 ### ChainingHashTable ###
@@ -84,7 +80,6 @@ your best algorithms and data structures on a reasonable machine.
  
  - How are the suggestions uMessage gives wth the new corpus?
    <pre>TODO</pre>
-
 
 -----
 
