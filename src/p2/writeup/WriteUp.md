@@ -47,10 +47,9 @@ your results. Explain your intuition on why your results are what they are.
 <pre>TODO</pre>
 
 ### ChainingHashTable ###
-Your ChainingHashTable takes as an argument to its constructor the type of "chains" it uses.  Which type
-of chain between MTFList, BST, and AVL Tree do you think works best on average?  For this question, we
-only want your intuition.  (There are no wrong answers here as long as you back up your answer.)  You
-do not need to actually do an experiment, but you are welcome to if you like.
+Your ChainingHashTable should take as an argument to its constructor the type of "chains" it uses.  Determine
+which type of chain is (on average) best: an MTFList, a BST, or an AVL Tree.  Explain your intuition on why
+the answer you got makes sense (or doesn't!). 
 <pre>TODO</pre>
  
 ### Hash Functions ###
@@ -59,6 +58,12 @@ Compare the runtime of your ChainingHashTable when the hash function is varied. 
 hash function make?  (You should keep all other inputs (e.g., the chain type) constant.)  Explain your intuition on
 why your results are what they are.
 <pre>TODO</pre>
+
+### General Purpose Dictionary ###
+Compare BST, AVLTree, ChainingHashTable, and HashTrieMap on alice.txt.  Is
+there a clear winner?  Why or why not?  Is the winner surprising to you?
+<pre>TODO</pre>
+
 
 ### uMessage ###
 Use uMessage to test out your implementations.  Using N=3, uMessage should take less than a minute to load using
