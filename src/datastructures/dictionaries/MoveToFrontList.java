@@ -5,6 +5,7 @@ import java.util.Iterator;
 import cse332.datastructures.containers.*;
 import cse332.exceptions.NotYetImplementedException;
 import cse332.interfaces.misc.DeletelessDictionary;
+import cse332.interfaces.misc.SimpleIterator;
 
 /**
  * TODO: Replace this comment with your own as appropriate.
@@ -70,6 +71,21 @@ public class MoveToFrontList<K, V> extends DeletelessDictionary<K, V> {
 
     @Override
     public Iterator<Item<K, V>> iterator() {
-        throw new NotYetImplementedException();
+        return new MoveToFrontListIterator();
+    }
+    private class MoveToFrontListIterator extends SimpleIterator<Item<K,V>> {
+        private ListItemNode current;
+        public MoveToFrontListIterator() {
+           this.current = MoveToFrontList.this.front;
+        }
+        public boolean hasNext() {
+            return current != null && current.next != null;
+        }
+        public Item<K,V> next() {
+            Item<K,V> returnItem = current.data;
+            current = current.next;
+            return returnItem;
+        }
+        
     }
 }
