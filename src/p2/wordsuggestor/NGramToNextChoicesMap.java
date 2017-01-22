@@ -1,6 +1,7 @@
 package p2.wordsuggestor;
 
 import java.util.Comparator;
+import java.util.Iterator;
 import java.util.function.Supplier;
 
 import cse332.datastructures.containers.Item;
@@ -52,7 +53,21 @@ public class NGramToNextChoicesMap {
      * @return An array of all the Items for the requested ngram.
      */
     public Item<String, Integer>[] getCountsAfter(NGram ngram) {
-        throw new NotYetImplementedException();
+        if(ngram == null) {
+            throw new NullPointerException();
+        }
+       
+        Dictionary<AlphabeticString, Integer> ngramCounts = this.map.find(ngram);
+        Item<String, Integer>[] array = (Item<String, Integer>[])new Item[ngramCounts.size()];
+        Iterator<Item<AlphabeticString, Integer>> iteratorPhase = ngramCounts.iterator();
+        int i = 0;
+        while(iteratorPhase.hasNext()) {
+            Item<AlphabeticString, Integer> point = iteratorPhase.next();
+            String passed = point.key.toString();
+            Item<String, Integer> puruse= new Item<String, Integer>(passed, point.value);            
+            array[i++] = puruse;           
+        }
+        return array;
     }
 
     public String[] getWordsAfter(NGram ngram, int k) {
