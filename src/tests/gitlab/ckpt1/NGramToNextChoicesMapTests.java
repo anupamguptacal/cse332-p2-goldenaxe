@@ -10,16 +10,16 @@ import cse332.datastructures.containers.Item;
 import cse332.interfaces.misc.Dictionary;
 import cse332.types.AlphabeticString;
 import cse332.types.NGram;
-import datastructures.dictionaries.HashTrieMap;
+import cse332.datastructures.trees.BinarySearchTree;
 import p2.wordsuggestor.NGramToNextChoicesMap;
 import tests.TestsUtility;
 
 public class NGramToNextChoicesMapTests extends TestsUtility {
     private static Supplier<Dictionary<NGram, Dictionary<AlphabeticString, Integer>>> newOuter =
-            () -> new HashTrieMap<String, NGram, Dictionary<AlphabeticString, Integer>>(NGram.class);
+            () -> new BinarySearchTree();
 
-    private static Supplier<Dictionary<AlphabeticString, Integer>> newInner = 
-            () -> new HashTrieMap<Character, AlphabeticString, Integer>(AlphabeticString.class);
+    private static Supplier<Dictionary<AlphabeticString, Integer>> newInner =
+            () -> new BinarySearchTree();
     
     public static void main(String[] args) {
         new NGramToNextChoicesMapTests().run();
@@ -28,8 +28,8 @@ public class NGramToNextChoicesMapTests extends TestsUtility {
     @Override
     protected void run() {
         SHOW_TESTS = true;
-	    PRINT_TESTERR = true;
-	    DEBUG = true;
+        PRINT_TESTERR = true;
+        DEBUG = true;
 
         test("testOneWordPerNGram");
         test("testMultipleWordsPerNGram");

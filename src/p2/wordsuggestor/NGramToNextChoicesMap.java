@@ -26,7 +26,20 @@ public class NGramToNextChoicesMap {
      * Increments the count of word after the particular NGram ngram.
      */
     public void seenWordAfterNGram(NGram ngram, String word) {
-        throw new NotYetImplementedException();
+        if (ngram == null || word == null) {
+            throw new IllegalArgumentException();
+        }
+        if (this.map.find(ngram) == null) {
+            this.map.insert(ngram, this.newInner.get());
+        }
+        AlphabeticString seenWord = new AlphabeticString(word);
+        Dictionary<AlphabeticString, Integer> ngramCounts = this.map.find(ngram);
+        if (ngramCounts.find(seenWord) == null) {
+            ngramCounts.insert(seenWord, 1);
+        } else {
+            int newCount = ngramCounts.find(seenWord) + 1;
+            ngramCounts.insert(seenWord, newCount);
+        }
     }
 
     /**
