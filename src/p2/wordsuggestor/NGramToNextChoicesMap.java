@@ -53,19 +53,22 @@ public class NGramToNextChoicesMap {
      * @return An array of all the Items for the requested ngram.
      */
     public Item<String, Integer>[] getCountsAfter(NGram ngram) {
-        if(ngram == null) {
-            throw new NullPointerException();
+        if (ngram == null) {
+            throw new IllegalArgumentException();
         }
-       
+        if (this.map.find(ngram) == null) {
+            return new Item[0];
+        }
         Dictionary<AlphabeticString, Integer> ngramCounts = this.map.find(ngram);
         Item<String, Integer>[] array = (Item<String, Integer>[])new Item[ngramCounts.size()];
         Iterator<Item<AlphabeticString, Integer>> iteratorPhase = ngramCounts.iterator();
         int i = 0;
-        while(iteratorPhase.hasNext()) {
+        while (iteratorPhase.hasNext()) {
             Item<AlphabeticString, Integer> point = iteratorPhase.next();
             String passed = point.key.toString();
-            Item<String, Integer> puruse= new Item<String, Integer>(passed, point.value);            
-            array[i++] = puruse;           
+            Item<String, Integer> peruse = new Item<String, Integer>(passed, point.value);            
+            array[i] = peruse;
+            i++;
         }
         return array;
     }
@@ -76,8 +79,7 @@ public class NGramToNextChoicesMap {
         Comparator<Item<String, Integer>> comp = new LargeValueFirstItemComparator<String, Integer>();
         if (k < 0) {
             InsertionSort.sort(afterNGrams, comp);
-        }
-        else {
+        } else {
             // You must fix this line toward the end of the project
             throw new NotYetImplementedException();
         }

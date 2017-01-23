@@ -102,18 +102,15 @@ public class CircularArrayFIFOQueue<E extends Comparable<E>> extends FixedSizeFI
     @Override
     @SuppressWarnings("unchecked")
     public boolean equals(Object obj) {
-        // You will finish implementing this method in p2. Leave this method unchanged for p1.
         if (this == obj) {
             return true;
         }
         else if (!(obj instanceof FixedSizeFIFOWorkList<?>)) {
             return false;
         }
-        else {
+        else { // Is this part necessary?
             FixedSizeFIFOWorkList<E> other = (FixedSizeFIFOWorkList<E>) obj;
-            if((other == null & this != null) || (this == null && other != null)) 
-                return false;
-            if(other.size() != this.size()) {
+            if (other == null || this == null || other.size() != this.size()) { 
                 return false;
             } else {
                 return (this.compareTo(other) == 0);             

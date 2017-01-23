@@ -3,7 +3,6 @@ package datastructures.dictionaries;
 import java.util.Iterator;
 
 import cse332.datastructures.containers.*;
-import cse332.exceptions.NotYetImplementedException;
 import cse332.interfaces.misc.DeletelessDictionary;
 import cse332.interfaces.misc.SimpleIterator;
 
@@ -46,6 +45,11 @@ public class MoveToFrontList<K, V> extends DeletelessDictionary<K, V> {
     
     public MoveToFrontList(Item<K, V> item) {
         this.front = new ListItemNode(item);
+        if (item == null || item.key == null || item.value == null) {
+            this.size = 0;
+        } else {
+            this.size = 1;
+        }
     }
     
     @Override
@@ -53,36 +57,63 @@ public class MoveToFrontList<K, V> extends DeletelessDictionary<K, V> {
         if (key == null || value == null) {
             throw new IllegalArgumentException();
         }
-        // iterate over list to find item with given key (use find)
-        // if found, replace value with value given here and return previous value
-        // else:
-        this.front = new ListItemNode(new Item(key, value), this.front);
-        return null;
-        // need the iterator implemented for this method to work
+        V prevVal = this.find(key);
+        if (prevVal != null) {
+            this.front.data.value = value;
+        } else { // there was not a previous mapping for given key
+            this.front = new ListItemNode(new Item(key, value), this.front);
+            this.size++;
+        }
+        return prevVal;
     }
 
     @Override
     public V find(K key) {
-        // this will just be the key/value item closest to the
-        // front of the list, because we don't have delete
-        // this is where we move the referenced node to the front
-        throw new NotYetImplementedException();
+        
+        // I want to use the iterator, but I can't think of a way
+        // to do it without a break statement :-/
+        
+        if (key == null) {
+            throw new IllegalArgumentException();
+        }
+        ListItemNode current = this.front;
+        V returnVal = null;
+        if (current != null && current.data != null) {
+            if (current.data.key == key) {
+                return current.data.value;
+            }
+            while (current.next != null && current.next.data != null && current.next.data.key != key) {
+                current = current.next;
+            }
+            if (current.next != null && current.next.data != null) {
+                returnVal = current.next.data.value;
+                ListItemNode referenced = current.next;
+                current.next = referenced.next;
+                referenced.next = this.front;
+                this.front = referenced;
+            }
+        }
+        return returnVal;
     }
 
     @Override
     public Iterator<Item<K, V>> iterator() {
         return new MoveToFrontListIterator();
     }
-    private class MoveToFrontListIterator extends SimpleIterator<Item<K,V>> {
+    
+    private class MoveToFrontListIterator extends SimpleIterator<Item<K, V>> {
         private ListItemNode current;
+        
         public MoveToFrontListIterator() {
            this.current = MoveToFrontList.this.front;
         }
+        
         public boolean hasNext() {
             return current != null && current.next != null;
         }
-        public Item<K,V> next() {
-            Item<K,V> returnItem = current.data;
+        
+        public Item<K, V> next() {
+            Item<K, V> returnItem = current.data;
             current = current.next;
             return returnItem;
         }
