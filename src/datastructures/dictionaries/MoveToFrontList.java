@@ -79,10 +79,12 @@ public class MoveToFrontList<K, V> extends DeletelessDictionary<K, V> {
         ListItemNode current = this.front;
         V returnVal = null;
         if (current != null && current.data != null) {
-            if (current.data.key == key) {
+            if (current.data.key.equals(key)) {
                 return current.data.value;
             }
-            while (current.next != null && current.next.data != null && current.next.data.key != key) {
+            while (current.next != null && current.next.data != null && 
+                   !current.next.data.key.equals(key)) {
+                
                 current = current.next;
             }
             if (current.next != null && current.next.data != null) {
