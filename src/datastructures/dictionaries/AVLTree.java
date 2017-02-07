@@ -46,7 +46,6 @@ public class AVLTree<K extends Comparable<K>, V> extends BinarySearchTree<K, V> 
         super();
     }
     
-    // need to add rotation method for fixing tree after insertion
     @Override
     public V insert(K key, V value) {
         if (key == null || value == null) {
@@ -68,31 +67,30 @@ public class AVLTree<K extends Comparable<K>, V> extends BinarySearchTree<K, V> 
         }
         AVLNode current = (AVLNode)this.root;
         int direction = 0;
-        AVLNode prev = null;
         int child = -1;
         AVLNode problemNode = null;
+        
         while (current != null) {
+            path.add(current);
             direction = Integer.signum(key.compareTo(current.key));
-            if (direction == 0) {
-                this.updateHeightDiffs(path, prev);
+            if (direction == 0) { // Look, the key's already here
                 return current;
             }
-            path.add(current);
             // direction will be -1 or 1
             // direction + 1 = {0, 2} -> {0, 1}
             child = Integer.signum(direction + 1);
-            if (current.heightDiff == 1) {
-                problemNode = current;
-            }
             current = (AVLNode)current.children[child];
         }
+        
         current = new AVLNode(key, null);
+        path.peek().children[child] = current;
+        path.add(current);
         this.size++;
-        if (problemNode == null) {
-            this.updateHeightDiffs(path, prev);
-        } else { // Now we know we have to rotate
+        problemNode = this.updateHeightDiffs(path);
+        if (problemNode != null) {
             problemNode = this.rotate(problemNode, path);
         }
+        path.clear();
         return current;
     }
     
@@ -100,11 +98,6 @@ public class AVLTree<K extends Comparable<K>, V> extends BinarySearchTree<K, V> 
         AVLNode grandchild = path.next();
         AVLNode child = path.next();
         AVLNode parent = path.next();
-        while (parent != problemNode) {
-            grandchild = child;
-            child = parent;
-            parent = path.next();
-        }
         K first = parent.key;
         K second = child.key;
         K third = grandchild.key;
@@ -133,31 +126,32 @@ public class AVLTree<K extends Comparable<K>, V> extends BinarySearchTree<K, V> 
         return child;
     }
     
-    private void updateHeightDiffs(ArrayStack<AVLNode> path, AVLNode prev) {
-        while (path.size() != 0) {
-            prev = path.next();
-            prev.heightDiff++;
+    // need to fix this to reflect +/-
+    private AVLNode updateHeightDiffs(ArrayStack<AVLNode> path) {
+        AVLNode parent = null;
+        AVLNode child = null;
+        AVLNode grandchild = null;
+        while (path.size() > 1) {
+            grandchild = child;
+            child = path.next();
+            parent = path.peek();
+            if (child == parent.children[1]) {
+                parent.heightDiff++;
+            } else {
+                parent.heightDiff--;
+            }
+            if (Math.abs(parent.heightDiff) == 2) {
+                path.clear();
+                path.add(parent);
+                path.add(child);
+                path.add(grandchild);
+                return parent;
+            }
         }
+        return null;
     }
     
     private boolean checkKinkCase(K edge1, K middle, K edge2) {
         return edge1.compareTo(middle) < 0 && middle.compareTo(edge2) < 0;
     }
-    
-    // Note to self: need to make sure that key != null when calling
-    // find(key, value) because it doesn't throw an exception for that
-    
-    // Do we want to check the height starting from the root or starting
-    // from the node we just inserted? We could have O(n)?? time and save
-    // n*sizeof(AVLNode) space or we could have O(lgn) time and store the
-    // parent pointer in each node...
-    // Is the former O(n) though? Because if we know the key of the node
-    // we just inserted, we don't have to check the whole tree. We can
-    // follow the path down using compareTo...
-    
-    // Idea: what if we make a different find that will stop at (and return)
-    // the node where we have to rotate from, and then just do a regular BST
-    // find from there?
-    
-    
 }
