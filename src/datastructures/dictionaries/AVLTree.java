@@ -93,13 +93,9 @@ public class AVLTree<K extends Comparable<K>, V> extends BinarySearchTree<K, V> 
             problemNodeParent = this.updateHeightDiffs(path);
         }
         if (problemNodeParent != null) {
-            if (problemNodeParent.key.compareTo(this.root.key) == 0) {
-                this.root = this.rotate(path);
-            } else {
-                int subTreeDirection = Integer.signum(key.compareTo(problemNodeParent.key));
-                int subTree = Integer.signum(subTreeDirection + 1);
-                problemNodeParent.children[subTree] = this.rotate(path);
-            }
+            int subTreeDirection = Integer.signum(key.compareTo(problemNodeParent.key));
+            int subTree = Integer.signum(subTreeDirection + 1);
+            problemNodeParent.children[subTree] = this.rotate(path);
         }
         return current;
     }
@@ -135,8 +131,8 @@ public class AVLTree<K extends Comparable<K>, V> extends BinarySearchTree<K, V> 
             AVLNode temp = child;
             child = grandchild;
             grandchild = temp;
-            child.heightDiff++;
-            grandchild.heightDiff--;
+            child.heightDiff += direction;
+            grandchild.heightDiff += direction;
         }
         // Now we know for sure we have the straight case
         remainder = (AVLNode)child.children[1 - side];
@@ -164,16 +160,16 @@ public class AVLTree<K extends Comparable<K>, V> extends BinarySearchTree<K, V> 
                 parent.heightDiff--;
             }
             if (Math.abs(parent.heightDiff) == 2) {
-                path.next();
-                AVLNode parentOfProblem = (AVLNode)this.root;
-                if (path.size() > 0) {
-                    parentOfProblem = path.peek();
+                if (path.size() == 1) {
+                    this.makeRotationPath(path, parent, child, grandchild);
+                    this.root = this.rotate(path);
+                    return null;
+                } else {
+                    path.next();
+                    AVLNode parentOfProblem = path.peek();
+                    this.makeRotationPath(path, parent, child, grandchild);
+                    return parentOfProblem;
                 }
-                path.clear();
-                path.add(parent);
-                path.add(child);
-                path.add(grandchild);
-                return parentOfProblem;
             }
         }
         return null;
@@ -181,5 +177,15 @@ public class AVLTree<K extends Comparable<K>, V> extends BinarySearchTree<K, V> 
     
     private boolean checkKinkCase(K edge1, K middle, K edge2) {
         return edge1.compareTo(middle) < 0 && middle.compareTo(edge2) < 0;
+    }
+    
+    private ArrayStack<AVLNode> makeRotationPath(ArrayStack<AVLNode> path, AVLNode parent, 
+                                  AVLNode child, AVLNode grandchild) {
+        
+        path.clear();
+        path.add(parent);
+        path.add(child);
+        path.add(grandchild);
+        return path;
     }
 }
