@@ -68,7 +68,7 @@ public class AVLTree<K extends Comparable<K>, V> extends BinarySearchTree<K, V> 
         AVLNode current = (AVLNode)this.root;
         int direction = 0;
         int child = -1;
-        AVLNode problemNode = null;
+        AVLNode problemNodeParent = null;
         
         while (current != null) {
             path.add(current);
@@ -83,18 +83,39 @@ public class AVLTree<K extends Comparable<K>, V> extends BinarySearchTree<K, V> 
         }
         
         current = new AVLNode(key, null);
-        path.peek().children[child] = current;
-        path.add(current);
         this.size++;
-        problemNode = this.updateHeightDiffs(path);
-        if (problemNode != null) {
-            problemNode = this.rotate(problemNode, path);
+        AVLNode parent = path.peek();
+        path.add(current);
+        parent.children[child] = current;
+        if (parent.children[1 - child] != null) {
+            parent.heightDiff += direction;
+        } else {
+            problemNodeParent = this.updateHeightDiffs(path);
         }
-        path.clear();
+        if (problemNodeParent != null) {
+            if (problemNodeParent.key.compareTo(this.root.key) == 0) {
+                this.root = this.rotate(path);
+            } else {
+                int subTreeDirection = Integer.signum(key.compareTo(problemNodeParent.key));
+                int subTree = Integer.signum(subTreeDirection + 1);
+                problemNodeParent.children[subTree] = this.rotate(path);
+            }
+        }
         return current;
     }
     
-    private AVLNode rotate(AVLNode problemNode, ArrayStack<AVLNode> path) {
+    private void printTree(AVLNode node) {
+        System.err.print(node.key + " ");
+        System.err.println(node.heightDiff);
+        if (node.children[0] != null) {
+            this.printTree((AVLNode)node.children[0]);
+        }
+        if (node.children[1] != null) {
+            this.printTree((AVLNode)node.children[1]);
+        }
+    }
+    
+    private AVLNode rotate(ArrayStack<AVLNode> path) {
         AVLNode grandchild = path.next();
         AVLNode child = path.next();
         AVLNode parent = path.next();
@@ -121,8 +142,10 @@ public class AVLTree<K extends Comparable<K>, V> extends BinarySearchTree<K, V> 
         remainder = (AVLNode)child.children[1 - side];
         parent.children[side] = remainder;
         child.children[1 - side] = parent;
-        child.heightDiff--;
-        parent.heightDiff = parent.heightDiff - 2;
+        // if direction == -1, child.heightDiff++; and parent.heightDiff + 2
+        // if direction == 1, child.heightDiff--; and parent.heightDiff - 2
+        child.heightDiff += (direction * -1);
+        parent.heightDiff += (direction * -2);
         return child;
     }
     
@@ -141,11 +164,16 @@ public class AVLTree<K extends Comparable<K>, V> extends BinarySearchTree<K, V> 
                 parent.heightDiff--;
             }
             if (Math.abs(parent.heightDiff) == 2) {
+                path.next();
+                AVLNode parentOfProblem = (AVLNode)this.root;
+                if (path.size() > 0) {
+                    parentOfProblem = path.peek();
+                }
                 path.clear();
                 path.add(parent);
                 path.add(child);
                 path.add(grandchild);
-                return parent;
+                return parentOfProblem;
             }
         }
         return null;
