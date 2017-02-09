@@ -1,20 +1,24 @@
 package datastructures.worklists;
 
 import cse332.interfaces.worklists.PriorityWorkList;
+
+import java.util.Comparator;
 import java.util.NoSuchElementException;
 
 /**
  * See cse332/interfaces/worklists/PriorityWorkList.java
  * for method specifications.
  */
-public class MinFourHeap<E extends Comparable<E>> extends PriorityWorkList<E> {
+public class MinFourHeap<E> extends PriorityWorkList<E> {
     /* Do not change the name of this field; the tests rely on it to work correctly. */
     private E[] data;
     private int size;
+    private Comparator<E> comparator;
     
-    public MinFourHeap() {
-        this.data = (E[])new Comparable[10];
+    public MinFourHeap(Comparator<E> comparator) {
+        this.data = (E[])new Object[10];
         this.size = 0;
+        this.comparator = comparator;
     }
 
     @Override
@@ -27,6 +31,9 @@ public class MinFourHeap<E extends Comparable<E>> extends PriorityWorkList<E> {
     @Override
     // adds given element to list
     public void add(E work) {
+        if (this.size == this.data.length) {
+            this.growArray();
+        }
         this.data[this.size] = work;
         // if there's only one element, no percolating needed
         if (this.size > 0) {
@@ -34,10 +41,6 @@ public class MinFourHeap<E extends Comparable<E>> extends PriorityWorkList<E> {
         	this.percolateUp(this.parent(this.size), this.size);
         }
         this.size++;
-        
-        if (this.size == this.data.length) {
-        	this.growArray();
-        }
     }
 
     @Override
@@ -80,13 +83,13 @@ public class MinFourHeap<E extends Comparable<E>> extends PriorityWorkList<E> {
     @Override
     // removes all elements from the list
     public void clear() {
-        this.data = (E[])new Comparable[10];
+        this.data = (E[])new Object[10];
         this.size = 0;
     }
     
     // doubles capacity of array
     private void growArray() {
-    	E[] newArray = (E[])new Comparable[this.size * 2];
+    	E[] newArray = (E[])new Object[this.size * 2];
     	for (int i = 0; i < this.size; i++) {
     		newArray[i] = this.data[i];
     	}
@@ -109,7 +112,7 @@ public class MinFourHeap<E extends Comparable<E>> extends PriorityWorkList<E> {
     	// if the child is the root or the parent is of higher or
     	// equal priority than the child, we're done
     	while (childIndex != 0 && 
-    		   this.data[childIndex].compareTo(this.data[parentIndex]) < 0) {
+    	       this.comparator.compare(this.data[childIndex], this.data[parentIndex]) < 0) {
     		
     		E temp = this.data[childIndex];
     		this.data[childIndex] = this.data[parentIndex];
@@ -125,7 +128,7 @@ public class MinFourHeap<E extends Comparable<E>> extends PriorityWorkList<E> {
     	// if the parent has no children or the children are all of lesser
     	// priority than the parent, we're done
     	while (minChildIndex != -1 && 
-    		   this.data[parentIndex].compareTo(this.data[minChildIndex]) > 0) {
+    	       this.comparator.compare(this.data[parentIndex], this.data[minChildIndex]) > 0) {
     		
     		E temp = this.data[minChildIndex];
     		this.data[minChildIndex] = this.data[parentIndex];
@@ -147,7 +150,7 @@ public class MinFourHeap<E extends Comparable<E>> extends PriorityWorkList<E> {
     	} else {
     		min = firstChild;
     		for (int i = firstChild + 1; i < firstChild + 4; i++) {
-    			if (i < this.size && this.data[i].compareTo(this.data[min]) < 0) {
+    			if (i < this.size && this.comparator.compare(this.data[i], this.data[min]) < 0) {
     				min = i;
     			}
     		}
