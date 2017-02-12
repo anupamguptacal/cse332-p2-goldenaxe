@@ -20,7 +20,7 @@ import cse332.interfaces.misc.Dictionary;
  *    list: http://primes.utm.edu/lists/small/100000.txt 
  *    NOTE: Do NOT copy the whole list!
  */
-public class ChainingHashTable<K, V> extends DeletelessDictionary<K, V> implements Iterable<Item<K,V>>{
+public class ChainingHashTable<K, V> extends DeletelessDictionary<K, V>{
     private final Supplier<Dictionary<K, V>> newChain;  
     private double loadFactor;
     private Dictionary<K,V>[] array;
