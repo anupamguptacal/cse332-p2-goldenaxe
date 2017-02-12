@@ -1,17 +1,17 @@
 package datastructures.dictionaries;
 
 import java.util.AbstractMap;
-import java.util.HashMap;
-import java.util.HashSet;
+//import java.util.HashMap;
+//import java.util.HashSet;
 import java.util.Iterator;
-import java.util.Map;
+//import java.util.Map;
 import java.util.Map.Entry;
-import java.util.Set;
 
 import cse332.datastructures.containers.Item;
 import cse332.interfaces.misc.BString;
 import cse332.interfaces.misc.Dictionary;
 import cse332.interfaces.trie.TrieMap;
+import datastructures.worklists.ArrayStack;
 
 /**
  * See cse332/interfaces/trie/TrieMap.java
@@ -31,13 +31,12 @@ public class HashTrieMap<A extends Comparable<A>, K extends BString<A>, V> exten
 
         @Override
         public Iterator<Entry<A, HashTrieMap<A, K, V>.HashTrieNode>> iterator() {
-            Set<Entry<A, HashTrieNode>> entrySet = new HashSet<>();
-            
+            ArrayStack<Entry<A, HashTrieNode>> entryValue = new ArrayStack<>();
 
             for(Item<A,HashTrieNode> value : this.pointers) {
-                entrySet.add(new AbstractMap.SimpleEntry(value.key, value.value));
+                entryValue.add(new AbstractMap.SimpleEntry(value.key, value.value));
             }
-            return entrySet.iterator();
+            return entryValue.iterator();
         }
     }
 
