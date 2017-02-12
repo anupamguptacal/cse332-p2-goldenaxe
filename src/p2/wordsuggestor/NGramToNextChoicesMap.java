@@ -82,8 +82,9 @@ public class NGramToNextChoicesMap {
         if (k < 0) {
             HeapSort.sort(afterNGrams, comp);
         } else {
-            TopKSort.sort(afterNGrams,k, computer);
-            
+            System.out.println("afterNGrams length " + afterNGrams.length);
+            System.out.println(k);
+            TopKSort.sort(afterNGrams,k, computer);         
         }
 
         String[] nextWords = new String[k < 0 ? afterNGrams.length : k];

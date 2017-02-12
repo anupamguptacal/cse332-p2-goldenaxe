@@ -33,11 +33,11 @@ import p2.wordsuggestor.WordSuggestor;
 
 public class uMessage {
     private static int N = 3;
-    private static String CORPUS = "eggs.txt";
+    private static String CORPUS = "alice.txt";
     private static Supplier<Dictionary<NGram, Dictionary<AlphabeticString, Integer>>> NEW_OUTER = NGramTester
-            .trieConstructor(NGram.class);
+            .avlTreeConstructor();
     private static Supplier<Dictionary<AlphabeticString, Integer>> NEW_INNER = NGramTester
-            .trieConstructor(AlphabeticString.class);
+            .avlTreeConstructor();
 
     /*
      *
