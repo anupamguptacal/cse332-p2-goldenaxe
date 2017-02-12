@@ -100,7 +100,7 @@ public class AVLTree<K extends Comparable<K>, V> extends BinarySearchTree<K, V> 
         return current;
     }
     
-    private void printTree(AVLNode node) {
+    /*private void printTree(AVLNode node) {
         System.err.print(node.key + " ");
         System.err.println(node.heightDiff);
         if (node.children[0] != null) {
@@ -109,7 +109,7 @@ public class AVLTree<K extends Comparable<K>, V> extends BinarySearchTree<K, V> 
         if (node.children[1] != null) {
             this.printTree((AVLNode)node.children[1]);
         }
-    }
+    }*/
     
     private AVLNode rotate(ArrayStack<AVLNode> path) {
         AVLNode grandchild = path.next();

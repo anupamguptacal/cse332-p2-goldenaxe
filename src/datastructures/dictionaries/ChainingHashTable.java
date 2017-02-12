@@ -1,6 +1,5 @@
 package datastructures.dictionaries;
 
-import java.util.Arrays;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 import java.util.function.Supplier;
@@ -9,7 +8,6 @@ import org.w3c.dom.ranges.RangeException;
 
 
 import cse332.datastructures.containers.*;
-import cse332.exceptions.NotYetImplementedException;
 import cse332.interfaces.misc.DeletelessDictionary;
 import cse332.interfaces.misc.Dictionary;
 
@@ -26,7 +24,7 @@ import cse332.interfaces.misc.Dictionary;
  *    NOTE: Do NOT copy the whole list!
  */
 public class ChainingHashTable<K, V> extends DeletelessDictionary<K, V> implements Iterable<Item<K,V>>{
-    private Supplier<Dictionary<K, V>> newChain;  
+    private final Supplier<Dictionary<K, V>> newChain;  
     private double loadFactor;
     private Dictionary<K,V>[] array;
     private final int[] sizes = {17, 37, 79, 163, 331, 673, 1361, 2729, 5471, 10949, 21911, 43853, 87719, 175447, 350899, 701819};
