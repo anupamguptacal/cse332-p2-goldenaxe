@@ -123,7 +123,7 @@ public class HashTrieMap<A extends Comparable<A>, K extends BString<A>, V> exten
     	if (key == null) {
     		throw new IllegalArgumentException();
     	} 
-    	HashTrieNode lastDelete = (HashTrieNode)this.root;
+    	//HashTrieNode lastDelete = (HashTrieNode)this.root;
     	A lastDeletePart = null;
     	if (key.iterator().hasNext()) {
 			lastDeletePart = key.iterator().next();
@@ -134,7 +134,7 @@ public class HashTrieMap<A extends Comparable<A>, K extends BString<A>, V> exten
     			return;
     		}
     		if (current.value != null || current.pointers.size() > 1) {
-    			lastDelete = current;
+    			//lastDelete = current;
     			lastDeletePart = part;
     		}
     		if (!current.pointers.isEmpty()) {
