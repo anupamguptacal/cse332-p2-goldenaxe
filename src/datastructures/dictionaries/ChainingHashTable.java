@@ -26,7 +26,7 @@ public class ChainingHashTable<K, V> extends DeletelessDictionary<K, V> implemen
     private Dictionary<K,V>[] array;
     private final int[] sizes = {17, 37, 79, 163, 331, 673, 1361, 2729, 5471, 10949, 21911, 43853, 87719, 175447, 350899, 701819};
     private int starting;
-    private int count;
+    private double count;
     private int counter;
     //private int iteratorStarter;
     
@@ -40,7 +40,7 @@ public class ChainingHashTable<K, V> extends DeletelessDictionary<K, V> implemen
         }
         starting = 0;
         //iteratorStarter = 0;
-        count = 0;
+        count = 0.0;
         counter = 0;
     }
     
@@ -64,7 +64,7 @@ public class ChainingHashTable<K, V> extends DeletelessDictionary<K, V> implemen
                   counter ++;
               }
               array[index].insert(key, value);
-              loadFactor = (double)((++count) / array.length);
+              loadFactor = (++count) / array.length;
             return value;
           } else {
               return null;
@@ -151,7 +151,7 @@ public class ChainingHashTable<K, V> extends DeletelessDictionary<K, V> implemen
                         }
                         changedDictionary[index].insert(item.key, item.value);
                     } else {
-                    return null;
+                    return new Dictionary[0];
                 }
             }
         }

@@ -124,11 +124,6 @@ public class HashTrieMap<A extends Comparable<A>, K extends BString<A>, V> exten
     		throw new IllegalArgumentException();
     	} 
     	HashTrieNode lastDelete = (HashTrieNode)this.root;
-    	lastDelete = null;
-    	lastDelete = (HashTrieNode) this.root;
-    	if(!lastDelete.equals((HashTrieNode)this.root)) {
-    	  return;
-    	}
     	A lastDeletePart = null;
     	if (key.iterator().hasNext()) {
 			lastDeletePart = key.iterator().next();
