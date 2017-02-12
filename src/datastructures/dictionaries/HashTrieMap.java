@@ -1,12 +1,16 @@
 package datastructures.dictionaries;
 
+import java.util.AbstractMap;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
 
 import cse332.datastructures.containers.Item;
 import cse332.interfaces.misc.BString;
+import cse332.interfaces.misc.Dictionary;
 import cse332.interfaces.trie.TrieMap;
 
 /**
@@ -15,8 +19,8 @@ import cse332.interfaces.trie.TrieMap;
  * for method specifications.
  */
 public class HashTrieMap<A extends Comparable<A>, K extends BString<A>, V> extends TrieMap<A, K, V> {
-    public class HashTrieNode extends TrieNode<Map<A, HashTrieNode>, HashTrieNode> {
-        ChainingHashTable<A, HashTrieNode> pointers;
+    public class HashTrieNode extends TrieNode<Dictionary<A, HashTrieNode>, HashTrieNode> {
+       public ChainingHashTable<A, HashTrieNode> pointers;
         public HashTrieNode() {
             this(null);
         }
@@ -28,11 +32,13 @@ public class HashTrieMap<A extends Comparable<A>, K extends BString<A>, V> exten
 
         @Override
         public Iterator<Entry<A, HashTrieMap<A, K, V>.HashTrieNode>> iterator() {
-            Map<A,HashTrieNode> mapping = new HashMap<A,HashTrieNode>();
+            Set<Entry<A, HashTrieNode>> entrySet = new HashSet<>();
+            
+
             for(Item<A,HashTrieNode> value : this.pointers) {
-                mapping.put(value.key, value.value);
+                entrySet.add(new AbstractMap.SimpleEntry(value.key, value.value));
             }
-            return mapping.entrySet().iterator();
+            return entrySet.iterator();
         }
     }
 
