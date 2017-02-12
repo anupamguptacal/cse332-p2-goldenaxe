@@ -56,25 +56,33 @@ public class ChainingHashTable<K, V> extends DeletelessDictionary<K, V> implemen
             this.array = resize(array);        
         } 
           int index = key.hashCode() % array.length;  
-          if(array[index] == null) {
-              array[index] = newChain.get();
+          if(index >= 0) {
+              if(array[index] == null) {
+                  array[index] = newChain.get();
+              }
+              if(this.find(key) == null) {
+                  counter ++;
+              }
+              array[index].insert(key, value);
+              loadFactor = (double)((++count) / array.length);
+            return value;
+          } else {
+              return null;
           }
-          if(this.find(key) == null) {
-              counter ++;
-          }
-          array[index].insert(key, value);
-          loadFactor = (++count) / array.length;
-        return value;
     }
 
     @Override
     public V find(K key) {
         int index = key.hashCode() % array.length;
+        if(index >= 0) {
             if(array[index] == null) {
                 array[index] = newChain.get();
                 return null;
             }
             return array[index].find(key);
+        } else {
+            return null;
+        }
     }
 
     @Override
@@ -83,7 +91,7 @@ public class ChainingHashTable<K, V> extends DeletelessDictionary<K, V> implemen
         if(array[0] == null) {
             array[0] = newChain.get();
         }
-        Iterator<Item<K,V>> iteratorConsideration = array[0].iterator();
+        //Iterator<Item<K,V>> iteratorConsideration = array[0].iterator();
         Iterator<Item<K,V>> it = new Iterator<Item<K,V>>() { 
             private int iteratorStarter = 0;
             
@@ -137,17 +145,23 @@ public class ChainingHashTable<K, V> extends DeletelessDictionary<K, V> implemen
             if(arrayChange[i] != null) {
                 for(Item<K,V> item : arrayChange[i]) {
                     int index = item.key.hashCode() % changedDictionary.length;
-                    if(changedDictionary[index] == null) {
-                        changedDictionary[index] = newChain.get();
-                    }
-                    changedDictionary[index].insert(item.key, item.value);
+                    if(index >= 0) {
+                        if(changedDictionary[index] == null) {
+                            changedDictionary[index] = newChain.get();
+                        }
+                        changedDictionary[index].insert(item.key, item.value);
+                    } else {
+                    return null;
                 }
             }
+        }
         }
         starting ++;
         return changedDictionary;
         
     }
-}
+    }
+
+
  
 

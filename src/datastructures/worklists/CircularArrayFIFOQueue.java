@@ -110,7 +110,7 @@ public class CircularArrayFIFOQueue<E extends Comparable<E>> extends FixedSizeFI
         }
         else { // Is this part necessary?
             FixedSizeFIFOWorkList<E> other = (FixedSizeFIFOWorkList<E>) obj;
-            if (other == null || this == null || other.size() != this.size()) { 
+            if (other.size() != this.size()) { 
                 return false;
             } else {
                 return (this.compareTo(other) == 0);             
