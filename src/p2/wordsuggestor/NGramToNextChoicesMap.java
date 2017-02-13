@@ -11,6 +11,7 @@ import cse332.misc.LargeValueFirstItemComparator;
 import cse332.sorts.InsertionSort;
 import cse332.types.AlphabeticString;
 import cse332.types.NGram;
+import p2.sorts.TopKSort;
 
 public class NGramToNextChoicesMap {
     private final Dictionary<NGram, Dictionary<AlphabeticString, Integer>> map;
@@ -81,7 +82,8 @@ public class NGramToNextChoicesMap {
             InsertionSort.sort(afterNGrams, comp);
         } else {
             // You must fix this line toward the end of the project
-            throw new NotYetImplementedException();
+            TopKSort.sort(afterNGrams, k, comp);
+            // merge conflicts are fun -_-
         }
 
         String[] nextWords = new String[k < 0 ? afterNGrams.length : k];

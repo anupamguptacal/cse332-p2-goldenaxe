@@ -34,6 +34,7 @@ public class MoveToFrontList<K, V> extends DeletelessDictionary<K, V> {
         }
         
         public ListItemNode(Item<K, V> item, ListItemNode next) {
+            // do I throw an IllegalArgumentException if item is null?
             this.data = item;
             this.next = next;
         }
@@ -45,6 +46,8 @@ public class MoveToFrontList<K, V> extends DeletelessDictionary<K, V> {
     
     public MoveToFrontList(Item<K, V> item) {
         this.front = new ListItemNode(item);
+        // is this necessary? Is client allowed to put null values
+        // with non-null keys in this dictionary?
         if (item == null || item.key == null || item.value == null) {
             this.size = 0;
         } else {
@@ -59,6 +62,7 @@ public class MoveToFrontList<K, V> extends DeletelessDictionary<K, V> {
         }
         V prevVal = this.find(key);
         if (prevVal != null) {
+            // Is it bad to edit existing node rather than creating new one?
             this.front.data.value = value;
         } else { // there was not a previous mapping for given key
             this.front = new ListItemNode(new Item(key, value), this.front);
@@ -82,6 +86,10 @@ public class MoveToFrontList<K, V> extends DeletelessDictionary<K, V> {
             if (current.data.key.equals(key)) {
                 return current.data.value;
             }
+            // Will there ever be a case where the next node is not null,
+            // but its data is null?
+            // Don't think so: client is not allowed to insert
+            // null keys and values
             while (current.next != null && current.next.data != null && 
                    !current.next.data.key.equals(key)) {
                 
