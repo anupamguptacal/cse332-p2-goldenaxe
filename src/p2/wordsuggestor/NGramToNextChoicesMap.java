@@ -5,12 +5,12 @@ import java.util.Iterator;
 import java.util.function.Supplier;
 
 import cse332.datastructures.containers.Item;
-import cse332.exceptions.NotYetImplementedException;
 import cse332.interfaces.misc.Dictionary;
 import cse332.misc.LargeValueFirstItemComparator;
-import cse332.sorts.InsertionSort;
+
 import cse332.types.AlphabeticString;
 import cse332.types.NGram;
+import p2.sorts.HeapSort;
 import p2.sorts.TopKSort;
 
 public class NGramToNextChoicesMap {
@@ -78,12 +78,13 @@ public class NGramToNextChoicesMap {
         Item<String, Integer>[] afterNGrams = getCountsAfter(ngram);
 
         Comparator<Item<String, Integer>> comp = new LargeValueFirstItemComparator<String, Integer>();
+        Comparator<Item<String, Integer>> computer = new SmallestValueFirstItemComparator<String, Integer>();
         if (k < 0) {
-            InsertionSort.sort(afterNGrams, comp);
-        } else {
-            // You must fix this line toward the end of the project
-            TopKSort.sort(afterNGrams, k, comp);
-            // merge conflicts are fun -_-
+            HeapSort.sort(afterNGrams, comp);
+        } else {        
+            System.out.println("afterNGrams length " + afterNGrams.length);
+            System.out.println(k);
+            TopKSort.sort(afterNGrams,k, computer);         
         }
 
         String[] nextWords = new String[k < 0 ? afterNGrams.length : k];
