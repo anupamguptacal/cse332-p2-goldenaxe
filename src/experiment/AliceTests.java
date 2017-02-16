@@ -3,14 +3,15 @@ package experiment;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.function.Supplier;
-
 import cse332.misc.WordReader;
 import cse332.types.AlphabeticString;
+import p2.sorts.QuickSort;
 
 public class AliceTests {
 
     public static void main(String[] args) throws FileNotFoundException {
         final String CORPUS = "alice.txt";
+        
         class InternalSupplier implements Supplier<MoveToFrontList<String, Integer>> {
             public InternalSupplier() {
                 super();
@@ -27,16 +28,26 @@ public class AliceTests {
         ChainingHashTableCopy<String, Integer> CHT = new ChainingHashTableCopy(a);
         HashTrieMap<Character, AlphabeticString, Integer> HTM = new HashTrieMap<>(AlphabeticString.class);
         
+        String[] words = new String[27551];
         WordReader reader = new WordReader(new FileReader(CORPUS));
         
+        int count = 0;
         while (reader.hasNext()) {
             String word = reader.next();
+            words[count] = word;
             incCount(BST, word);
             incCount(AVL, word);
             incCount(CHT, word);
             incCount(HTM, word);
+            count++;
+        }
+
+        QuickSort.sort(words);
+        for (int i = 0; i < 5000; i++) {
+            System.out.print(words[i] + " ");
         }
         
+        System.out.println(count);
         System.out.println(BST.getSteps());
         System.out.println(AVL.getSteps());
         System.out.println(CHT.getSteps());
