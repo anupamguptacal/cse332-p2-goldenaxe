@@ -1,12 +1,17 @@
 package datastructures.dictionaries;
 
-import java.util.HashMap;
+import java.util.AbstractMap;
+//import java.util.HashMap;
+//import java.util.HashSet;
 import java.util.Iterator;
-import java.util.Map;
+//import java.util.Map;
 import java.util.Map.Entry;
 
+import cse332.datastructures.containers.Item;
 import cse332.interfaces.misc.BString;
+import cse332.interfaces.misc.Dictionary;
 import cse332.interfaces.trie.TrieMap;
+import datastructures.worklists.ArrayStack;
 
 /**
  * See cse332/interfaces/trie/TrieMap.java
@@ -14,19 +19,24 @@ import cse332.interfaces.trie.TrieMap;
  * for method specifications.
  */
 public class HashTrieMap<A extends Comparable<A>, K extends BString<A>, V> extends TrieMap<A, K, V> {
-    public class HashTrieNode extends TrieNode<Map<A, HashTrieNode>, HashTrieNode> {
+    public class HashTrieNode extends TrieNode<Dictionary<A, HashTrieNode>, HashTrieNode> {
         public HashTrieNode() {
             this(null);
         }
 
         public HashTrieNode(V value) {
-            this.pointers = new HashMap<A, HashTrieNode>();
+            this.pointers = new ChainingHashTable<>(() -> new MoveToFrontList<>());
             this.value = value;
         }
 
         @Override
         public Iterator<Entry<A, HashTrieMap<A, K, V>.HashTrieNode>> iterator() {
-            return pointers.entrySet().iterator();
+            ArrayStack<Entry<A, HashTrieNode>> entryValue = new ArrayStack<>();
+
+            for(Item<A,HashTrieNode> value : this.pointers) {
+                entryValue.add(new AbstractMap.SimpleEntry(value.key, value.value));
+            }
+            return entryValue.iterator();
         }
     }
 
@@ -52,10 +62,10 @@ public class HashTrieMap<A extends Comparable<A>, K extends BString<A>, V> exten
     	} else {
     		HashTrieNode current = (HashTrieNode)this.root;
     		for (A part : key) {
-    			if (!current.pointers.containsKey(part)) {
-    				current.pointers.put(part, new HashTrieNode());    			
+    			if (current.pointers.find(part) == null) {
+    				current.pointers.insert(part, new HashTrieNode());    			
     			}
-    			current = current.pointers.get(part); 		  		
+    			current = current.pointers.find(part); 		  		
     		}
     		returnValue = current.value;
     		current.value = value;
@@ -80,7 +90,7 @@ public class HashTrieMap<A extends Comparable<A>, K extends BString<A>, V> exten
     	
     	HashTrieNode current = (HashTrieNode)this.root;
     	for (A part: key) {
-    		current = current.pointers.get(part);
+    		current = current.pointers.find(part);
     		if (current == null) {
     			return null;
     		}
@@ -99,7 +109,7 @@ public class HashTrieMap<A extends Comparable<A>, K extends BString<A>, V> exten
     	
     	HashTrieNode current = (HashTrieNode)this.root;
     	for (A part: key) {
-    		current = current.pointers.get(part);
+    		current = current.pointers.find(part);
     		if (current == null) {
     			return false;
     		} 
@@ -112,22 +122,13 @@ public class HashTrieMap<A extends Comparable<A>, K extends BString<A>, V> exten
     	if (key == null) {
     		throw new IllegalArgumentException();
     	} 
-    	HashTrieNode lastDelete = (HashTrieNode)this.root;
-    	A lastDeletePart = null;
-    	if (key.iterator().hasNext()) {
-			lastDeletePart = key.iterator().next();
-		}
     	HashTrieNode current = (HashTrieNode)this.root;
     	for (A part: key) {
     		if (current == null) {
     			return;
     		}
-    		if (current.value != null || current.pointers.size() > 1) {
-    			lastDelete = current;
-    			lastDeletePart = part;
-    		}
     		if (!current.pointers.isEmpty()) {
-    			current = current.pointers.get(part);
+    			current = current.pointers.find(part);
     		} else {
     			return;
     		}
@@ -135,8 +136,6 @@ public class HashTrieMap<A extends Comparable<A>, K extends BString<A>, V> exten
     	if (current != null && current.value != null) {
     		if (!current.pointers.isEmpty()) {
     			current.value = null;
-    		} else if (lastDeletePart != null) {
-    			lastDelete.pointers.remove(lastDeletePart);
     		} else {
     			this.root.value = null;
     		}

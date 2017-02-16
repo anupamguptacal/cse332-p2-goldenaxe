@@ -9,6 +9,9 @@ public class TopKSort {
     }
 
     public static <E> void sort(E[] array, int k, Comparator<E> comparator) {
+        if (k > array.length) {
+            k = array.length;
+        }
         MinFourHeap<E> sortingHeap = new MinFourHeap<E>(comparator);
         for (int i = 0; i < k; i++) {
             sortingHeap.add(array[i]);

@@ -107,10 +107,9 @@ public class CircularArrayFIFOQueue<E extends Comparable<E>> extends FixedSizeFI
         }
         else if (!(obj instanceof FixedSizeFIFOWorkList<?>)) {
             return false;
-        }
-        else { // Is this part necessary?
+        } else { // Is this part necessary?
             FixedSizeFIFOWorkList<E> other = (FixedSizeFIFOWorkList<E>) obj;
-            if (other == null || this == null || other.size() != this.size()) { 
+            if (other.size() != this.size()) { 
                 return false;
             } else {
                 return (this.compareTo(other) == 0);             
@@ -120,8 +119,10 @@ public class CircularArrayFIFOQueue<E extends Comparable<E>> extends FixedSizeFI
 
     @Override
     public int hashCode() {
-        // You will implement this method in p2. Leave this method unchanged for p1.
-        // Dummy return value here so that the tests don't flip out
-        return 0;
+        int hashCodebuildUp = 0;
+        for(int i = 0; i < this.size; i ++) {
+            hashCodebuildUp += array[(read + i)%array.length].hashCode() * (this.read + i); 
+        }
+        return hashCodebuildUp * (this.size - this.read);
     }
 }
