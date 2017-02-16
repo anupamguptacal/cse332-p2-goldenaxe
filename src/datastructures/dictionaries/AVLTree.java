@@ -1,7 +1,6 @@
 package datastructures.dictionaries;
 
 import cse332.datastructures.trees.BinarySearchTree;
-import cse332.datastructures.trees.BinarySearchTree.BSTNode;
 import datastructures.worklists.ArrayStack;
 
 /**
@@ -38,7 +37,6 @@ public class AVLTree<K extends Comparable<K>, V> extends BinarySearchTree<K, V> 
         public AVLNode(K key, V value) {
             super(key, value);
             this.heightDiff = 0;
-            // Where do we want to cast the children to AVLNodes?
         } 
     }
     
@@ -51,7 +49,6 @@ public class AVLTree<K extends Comparable<K>, V> extends BinarySearchTree<K, V> 
         if (key == null || value == null) {
             throw new IllegalArgumentException();
         }
-        // here is where we need to make our own find
         AVLNode current = this.findForInsert(key);
         V oldValue = current.value;
         current.value = value;
@@ -92,7 +89,7 @@ public class AVLTree<K extends Comparable<K>, V> extends BinarySearchTree<K, V> 
         } else {
             problemNodeParent = this.updateHeightDiffs(path);
         }
-        if (problemNodeParent != null) {
+        if (problemNodeParent != null) { // tree became imbalanced somewhere that is not the root
             int subTreeDirection = Integer.signum(key.compareTo(problemNodeParent.key));
             int subTree = Integer.signum(subTreeDirection + 1);
             problemNodeParent.children[subTree] = this.rotate(path);
@@ -100,7 +97,7 @@ public class AVLTree<K extends Comparable<K>, V> extends BinarySearchTree<K, V> 
         return current;
     }
     
-    private void printTree(AVLNode node) {
+    /*private void printTree(AVLNode node) {
         System.err.print(node.key + " ");
         System.err.println(node.heightDiff);
         if (node.children[0] != null) {
@@ -109,7 +106,7 @@ public class AVLTree<K extends Comparable<K>, V> extends BinarySearchTree<K, V> 
         if (node.children[1] != null) {
             this.printTree((AVLNode)node.children[1]);
         }
-    }
+    }*/
     
     private AVLNode rotate(ArrayStack<AVLNode> path) {
         AVLNode grandchild = path.next();
@@ -138,14 +135,13 @@ public class AVLTree<K extends Comparable<K>, V> extends BinarySearchTree<K, V> 
         remainder = (AVLNode)child.children[1 - side];
         parent.children[side] = remainder;
         child.children[1 - side] = parent;
-        // if direction == -1, child.heightDiff++; and parent.heightDiff + 2
-        // if direction == 1, child.heightDiff--; and parent.heightDiff - 2
+        // if direction == -1, child.heightDiff++; and parent.heightDiff += 2
+        // if direction == 1, child.heightDiff--; and parent.heightDiff -= 2
         child.heightDiff += (direction * -1);
         parent.heightDiff += (direction * -2);
         return child;
     }
     
-    // need to fix this to reflect +/-
     private AVLNode updateHeightDiffs(ArrayStack<AVLNode> path) {
         AVLNode parent = null;
         AVLNode child = null;
@@ -160,7 +156,7 @@ public class AVLTree<K extends Comparable<K>, V> extends BinarySearchTree<K, V> 
                 parent.heightDiff--;
             }
             if (Math.abs(parent.heightDiff) == 2) {
-                if (path.size() == 1) {
+                if (path.size() == 1) { // parent is the root
                     this.makeRotationPath(path, parent, child, grandchild);
                     this.root = this.rotate(path);
                     return null;
@@ -179,13 +175,12 @@ public class AVLTree<K extends Comparable<K>, V> extends BinarySearchTree<K, V> 
         return edge1.compareTo(middle) < 0 && middle.compareTo(edge2) < 0;
     }
     
-    private ArrayStack<AVLNode> makeRotationPath(ArrayStack<AVLNode> path, AVLNode parent, 
+    private void makeRotationPath(ArrayStack<AVLNode> path, AVLNode parent, 
                                   AVLNode child, AVLNode grandchild) {
         
         path.clear();
         path.add(parent);
         path.add(child);
         path.add(grandchild);
-        return path;
     }
 }
