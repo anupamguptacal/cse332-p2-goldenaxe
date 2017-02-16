@@ -7,10 +7,10 @@ public class SmallestValueFirstItemComparator<K extends Comparable<K>, V extends
         implements Comparator<Item<K, V>> {
     @Override
     public int compare(Item<K, V> e1, Item<K, V> e2) {
-        /*int result = e1.value.compareTo(e2.value);
+        int result = e1.value.compareTo(e2.value);
         if (result != 0) {
             return result;
-        }*/ // I don't think this part is necessary
+        }
         return e2.key.compareTo(e1.key);
     }
 }
