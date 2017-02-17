@@ -224,7 +224,14 @@ insert depends on find, with a larger list and all elements being entered in the
 lot more time than the operation on the original Chaining Hash Table. The same trends can be observed for random inserts
 into both the lists in the graph attached.
 
-To check for space utilization, every time the chaining hash table needed to be resized, I checked how many indices in the previous table were empty and checked how the results were. As expected, the results with unchanged hash function hash table were massively lesser than that with the changed hash function since the unchanged hash table let the elements be placed everywhere in the table while the changed specified only places the elements one of 2 indices. The number of empty indices in array during resizing for sequential unchanged so close to zero since the tests inserted <Integer, Integer> key/value pairs and the hash code for an integer is the number itself, hence each element in sequential was added to an index that came after that. Following this, for the sequential experiment, the empty indices in Unchanged Hash table before resizing were 0 in all data sets.
+To check for space utilization, every time the chaining hash table needed to be resized, I checked how many indices in the
+previous table were empty and checked how the results were. As expected, the results with unchanged hash function hash
+table were massively lesser than that with the changed hash function since the unchanged hash table let the elements be
+placed everywhere in the table while the changed specified only places the elements one of 2 indices. The number of empty
+indices in array during resizing for sequential unchanged is so close to zero since the tests inserted <Integer, Integer>
+key/value pairs and the hash code for an integer is the number itself, hence each element in sequential was added to an
+index that came after that. Following this, for the sequential experiment, the empty indices in Unchanged Hash table
+before resizing were 0 in all data sets.
 
 The find algorithm for the two Chaining Hash Tables also varied a lot since in the unchanged hash table, the find would
 just need to figure out the index and find in the dictionary which for a MoveToFrontList is O(n). However, in the changed
@@ -253,8 +260,73 @@ can be found in the same folder. The csv file with the data can also be found th
 ### General Purpose Dictionary ###
 Compare BST, AVLTree, ChainingHashTable, and HashTrieMap on alice.txt.  Is
 there a clear winner?  Why or why not?  Is the winner surprising to you?
-<pre>TODO</pre>
 
+![](AliceRandomEntryTest.png)
+![](AliceSomewhatRandomEntryTest.png)
+![](AliceSequentialEntryTest.png)![](AliceSequentialEntryTestLogarithmic.png)
+
+<hr/>
+
+As is always the case, these data structures all have tradeoffs, so the "winner" in one situation may be terrible for a
+different job. That said, the winner here seems to be ChainingHashTable. We aren't very surprised by that, because there
+are a lot of repeated words in our data set, and the chain used in our CHT, MoveToFrontList, is designed to be efficient
+when accessing items that have been recently accessed. Before we analyze our results further, we'll explain our
+experiment.
+
+We used the same idea that we used for comparing Binary Search Trees and AVL Trees; we wanted to test our data structures'
+performance on randomly entered data, somewhat randomly entered data, and sequentially entered data. In this case, our
+three inputs were words chosen randomly from the specified subset of alice.txt, words chosen from a sorted version of
+alice.txt by using as an index the minimum or maximum of the loop iteration and a random number from 0 to the data set
+size, and the words of alice.txt entered in completely sorted alphabetical order. For each input, we tested how many steps
+it took to find and insert all of the words for each data structure (Binary Search Tree, AVL Tree, Chaining Hash Table,
+and Hash Trie Map). We counted each contiguous block of O(1) code in these data structures as one step, which meant
+incrementing the step count at the beginning of each method and in every loop, without forgetting to count the steps for
+method calls to other data structures. (For the exact code we used, see AliceTests.java in the experiments folder). We
+used the incCount method from the AVLTree tests in order to test both find and insert on these data structures (so, we
+were recording the number of times we'd seen each word). We averaged these tests over 500 trials for both the random and
+somewhat random input, and only did one trial for the completely sequential input (because it's the same number of steps
+every time for that one). We tested each data structure on a subset of the words in alice.txt: the first 100, the first
+1000, the first 5000, the first 10000, the first 18000, and the whole thing (27551 words). 
+
+The data we got is pretty consistent with what we expected. We knew that ChainingHashTable would perform well, as I said,
+because of repeated words. It makes sense that CHT performed slightly better, too, with the sequential/alphabetical data
+than it did with the random data, because then all of the accesses of repeated words were happening in contiguous chunks.
+It was with our decent hash function, too, and not the horrible one from the last experiment. Though it performed slightly
+better on the more sequential data, it also did really well with the random data, because if words are randomly chosen
+there are still probably going to be repeats, and the good hash function gives us a good load factor. All in all,
+ChainingHashTable clearly wins, because it takes far fewer steps asymptotically than the other three data structures.
+
+Then, BinarySearchTree performed next best asymptotically on the random and somewhat random input. This is not a surprise,
+given what we observed of its behavior in the BST vs AVL experiment. It ends up being reasonably well balanced with random
+data because random data is pretty evenly distributed (especially with large data sets) and it doesn't do all of the work
+that AVL tree does to rotate. Thus, it gives logarithmic (or close to logarithmic) find and insert time without the
+overhead work of rotation. So, it makes sense that it performed better with both the random and somewhat random data than
+the AVL tree. In these cases, the data didn't cause enough imbalance in the tree to make AVL's rotations worthwhile. It's
+interesting that we observed that the AVL tree did slightly better with the somewhat random data in experiment #1, but the
+BST did slightly better with the somewhat random data here, even though we used the exact same algorithm to get the
+somewhat random input data. Our guess is that is happening because our algorithm is pretty balanced between being random
+and sequential, so it could go either way. In both experiments, the step counts are close. As for the completely
+sequential input, as we expected, the BST performed terribly. (I actually decided to include a graph with a logarithmic 
+y-axis in addition to the linear one, because the BST's step count left all the others in the dust and they all looked the
+same in the linear graph.) The AVL tree did much better for the sequential input (second best, in fact), as it did in
+experiment #1. When the data is completely sequential, the overhead work for rotations saves a lot of find/insert time
+asymptotically because it is still O(lgn) while the BST becomes O(n).
+
+HashTrieMap is the clearest poor choice here (disregarding BST's abysmal performance on sequential input). It performed
+worst on the random and somewhat random data, and second-worst on the sequential data. Now we see why we had to replace
+the tries used originally for uMessage to get uMessage to work. HashTrieMap may have good space complexity, being able to
+save on space with words with similar prefixes, but traversing each word letter by letter evidently takes time. Not too
+much more time than the AVL tree, as we see, but still. The number of letters it has to traverse through in a word (plus
+the underlying ChainingHashMap traversing in the pointers) in each of its nodes may very well take more steps than are
+necessary to get to a specific node traversing through an AVL tree. For each entry, HTM has to traverse through the entire
+word (making it O(k) where k is the length of the word), whereas only half of the AVL tree's nodes are the bottom (worst
+case) and the AVL tree's find and insert are O(lgn).
+
+So, in conclusion, based on what we've learned about these data structures' strengths and weaknesses, the results of these
+tests make sense for these inputs. Because these are all dictionaries, they all get the job done, but ChainingHashTable is
+our dictionary of choice here.
+
+<hr/>
 
 ### uMessage ###
 Use uMessage to test out your implementations.  Using N=3, uMessage should take less than a minute to load using
