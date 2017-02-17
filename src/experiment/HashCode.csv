@@ -1,0 +1,25 @@
+Size of DataSet,100,200,400,600,800,1000,5000
+Insert Time Normal Sequential,63,87,82,90,124,133,464
+Insert Time Changed Sequential,96,233,868,1562,3404,4324,129067
+,,,,,,,
+Find Time Normal Sequential,4,1,4,7,17,17,96
+Find Time Changed Sequential,41,83,323,766,1717,2354,70868
+,,,,,,,
+Empty Elements in array during resizing Normal Sequential,0,0,0,0,0,0,0
+Empty Elements in array during resizing Changed Sequential,132,293,622,622,1293,1293,5379
+,,,,,,,
+Steps used in Insert Sequential Normal,847,1711,3443,4843,6917,8317,40409
+Steps used in Insert Sequential changed,6534,26003,103770,301770,410654,768654,21246824
+,,,,,,,
+,,,,,,,
+Insert Time Normal Random,66,153,156,137,200,242,1072
+Insert Time Changed Random,82,191,599,794,1839,2423,82738
+,,,,,,,
+Find Time Normal Random,13,22,54,30,66,69,536
+Find Time Changed Random,26,76,264,553,986,1781,92273
+,,,,,,,
+Empty Elements in array during resizing Normal Random,50,110,232,232,479,479,1983
+Empty Elements in array during resizing Changed Random,132,293,622,622,1293,1293,5379
+,,,,,,,
+Steps used in Insert Random Normal,755,1516,3041,4297,6097,7357,35775
+Steps used in Insert Random changed,3818,14095,54058,154570,209662,390171,10653946

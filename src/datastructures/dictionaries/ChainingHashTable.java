@@ -31,7 +31,6 @@ public class ChainingHashTable<K, V> extends DeletelessDictionary<K, V>{
     //private int iteratorStarter;
     
     public ChainingHashTable(Supplier<Dictionary<K, V>> newChain) {
-        //////Systemerr.println("Constructor called");
         this.newChain = newChain;
         loadFactor = 0.0;
         array = new Dictionary[7];
@@ -53,27 +52,30 @@ public class ChainingHashTable<K, V> extends DeletelessDictionary<K, V>{
     @Override
     public V insert(K key, V value) {
         if(loadFactor >= 1) {
-            this.array = resize(array);        
-        } 
-          int index = key.hashCode() % array.length;  
+            this.array = resize(array); 
+        }
+          int index = Math.abs(key.hashCode() % array.length);  
           if(index >= 0) {
               if(array[index] == null) {
                   array[index] = newChain.get();
               }
+              V returnValue = null;
               if(this.find(key) == null) {
                   counter ++;
+              } else {
+                  returnValue = this.find(key);
               }
               array[index].insert(key, value);
               loadFactor = (++count) / array.length;
-            return value;
+            return returnValue;
           } else {
               return null;
           }
     }
-
+    
     @Override
     public V find(K key) {
-        int index = key.hashCode() % array.length;
+        int index = Math.abs(key.hashCode() % array.length);
         if(index >= 0) {
             if(array[index] == null) {
                 array[index] = newChain.get();
@@ -144,7 +146,7 @@ public class ChainingHashTable<K, V> extends DeletelessDictionary<K, V>{
         for(int i = 0; i < arrayChange.length; i++) {
             if(arrayChange[i] != null) {
                 for(Item<K,V> item : arrayChange[i]) {
-                    int index = item.key.hashCode() % changedDictionary.length;
+                    int index = Math.abs(item.key.hashCode() % changedDictionary.length);
                     if(index >= 0) {
                         if(changedDictionary[index] == null) {
                             changedDictionary[index] = newChain.get();

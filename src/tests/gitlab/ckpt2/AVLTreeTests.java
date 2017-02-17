@@ -1,11 +1,9 @@
 package tests.gitlab.ckpt2;
-
 import cse332.datastructures.containers.Item;
 import cse332.datastructures.trees.BinarySearchTree.BSTNode;
 import cse332.interfaces.misc.Dictionary;
 import datastructures.dictionaries.AVLTree;
 import tests.TestsUtility;
-
 public class AVLTreeTests extends TestsUtility {
 	
 	public static void main(String[] args) {
@@ -21,10 +19,8 @@ public class AVLTreeTests extends TestsUtility {
 		test("checkStructure");
 		finish();
 	}
-
 	protected static AVLTree<String, Integer> init() {
 		AVLTree<String, Integer> tree = new AVLTree<>();
-
 		return tree;
 	}
 	
@@ -68,20 +64,17 @@ public class AVLTreeTests extends TestsUtility {
 		incCount(tree, 0);
 //		{10, 14, 10, 31, 10, 13, 10, 10, 12, 10, 13, 10, 10, 11, 10, 14, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0}
 //		{10, 14, 31, 13, 12, 11, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0}
-
 		BSTNode root = (BSTNode) getField(tree, "root");
 		
 		String trueData = " [8 [4 [2 [1 [0..].] [3..]] [6 [5..] [7..]]] [12 [10 [9..] [11..]] [14 [13..] [31..]]]]";
 		String trueCounts = " [1 [1 [1 [1 [1..].] [1..]] [1 [1..] [1..]]] [1 [9 [1..] [1..]] [2 [2..] [1..]]]]";
 //		String trueData = " [10 [6 [2 [1 [0..].] [4 [3..] [5..]]] [8 [7..] [9..]]] [13 [12 [11..].] [14. [31..]]]]";
 //		String trueCounts = " [9 [1 [1 [1 [1..].] [1 [1..] [1..]]] [1 [1..] [1..]]] [2 [1 [1..].] [2. [1..]]]]";
-
 //		System.err.println(nestd(root));
 //		System.err.println(trueData);
 		return nestd(root).equals(trueData) &&
 				nestc(root).equals(trueCounts) ? 1 : 0;
 	}
-
 	@SuppressWarnings("rawtypes")
 	public static String nestd(BSTNode root) {
 		if(root == null)
@@ -103,7 +96,6 @@ public class AVLTreeTests extends TestsUtility {
 			String str = tests[i] + "a";
 			incCount(tree, str);
 		}
-
 		boolean passed = true;
 		int i = 0;
 		for (Item<String, Integer> item : tree) {
@@ -112,14 +104,11 @@ public class AVLTreeTests extends TestsUtility {
 			passed &= str.equals(str_heap);
 			i++;
 		}
-
 		return passed ? 1 : 0;
 	}
-
 	public static int testHugeTree() {
 		AVLTree<String, Integer> tree = init();
 		int n = 1000;
-
 		// Add them
 		for (int i = 0; i < 5 * n; i++) {
 			int k = (i % n) * 37 % n;
@@ -127,7 +116,6 @@ public class AVLTreeTests extends TestsUtility {
 			for (int j = 0; j < k + 1; j ++)
 				incCount(tree, str);
 		}
-
 		// Delete them all
 		boolean passed = true;
 		int totalCount = 0;
@@ -143,5 +131,4 @@ public class AVLTreeTests extends TestsUtility {
 		
 		return passed ? 1 : 0;
 	}
-
 }

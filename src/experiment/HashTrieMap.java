@@ -42,6 +42,7 @@ public class HashTrieMap<A extends Comparable<A>, K extends BString<A>, V> exten
           ArrayStack<Entry<A, HashTrieNode>> entryValue = new ArrayStack<>();
 
           for(Item<A,HashTrieNode> value : this.pointers) {
+              steps++;
               entryValue.add(new AbstractMap.SimpleEntry(value.key, value.value));
           }
           return entryValue.iterator();
@@ -57,6 +58,10 @@ public class HashTrieMap<A extends Comparable<A>, K extends BString<A>, V> exten
   
   public long getSteps() {
       return this.steps;
+  }
+  
+  public void resetCount(HashTrieNode current) {
+      current.pointers.steps = 0;
   }
 
   @Override
@@ -76,11 +81,13 @@ public class HashTrieMap<A extends Comparable<A>, K extends BString<A>, V> exten
       } else {
           HashTrieNode current = (HashTrieNode)this.root;
           for (A part : key) {
-              steps++;
+              this.steps++;
               if (current.pointers.find(part) == null) {
-                  current.pointers.insert(part, new HashTrieNode());              
+                  current.pointers.insert(part, new HashTrieNode());
               }
-              current = current.pointers.find(part);              
+              current = current.pointers.find(part);
+              this.steps += current.pointers.getSteps();
+              resetCount(current);
           }
           returnValue = current.value;
           current.value = value;
@@ -111,6 +118,8 @@ public class HashTrieMap<A extends Comparable<A>, K extends BString<A>, V> exten
           if (current == null) {
               return null;
           }
+          this.steps += current.pointers.getSteps();
+          resetCount(current);
       }
       return current.value;
   }
@@ -131,12 +140,15 @@ public class HashTrieMap<A extends Comparable<A>, K extends BString<A>, V> exten
           if (current == null) {
               return false;
           } 
+          this.steps += current.pointers.getSteps();
+          resetCount(current);
       }
       return true;    
   }
 
   @Override
   public void delete(K key) {
+      this.steps++;
       if (key == null) {
           throw new IllegalArgumentException();
       } 
@@ -147,6 +159,7 @@ public class HashTrieMap<A extends Comparable<A>, K extends BString<A>, V> exten
       }
       HashTrieNode current = (HashTrieNode)this.root;
       for (A part: key) {
+          this.steps++;
           if (current == null) {
               return;
           }
@@ -156,7 +169,10 @@ public class HashTrieMap<A extends Comparable<A>, K extends BString<A>, V> exten
           }
           if (!current.pointers.isEmpty()) {
               current = current.pointers.find(part);
-          } else {
+              this.steps += current.pointers.getSteps();
+              resetCount(current);
+          } 
+          else {
               return;
           }
       }
@@ -174,6 +190,7 @@ public class HashTrieMap<A extends Comparable<A>, K extends BString<A>, V> exten
 
   @Override
   public void clear() {
+      this.steps++;
       this.size = 0;
       this.root = new HashTrieNode();
   }

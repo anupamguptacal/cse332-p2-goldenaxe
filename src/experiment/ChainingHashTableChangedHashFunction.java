@@ -5,6 +5,7 @@ import java.util.NoSuchElementException;
 import java.util.function.Supplier;
 
 import cse332.datastructures.containers.Item;
+import cse332.interfaces.misc.DeletelessDictionary;
 
 
 /**
@@ -19,19 +20,19 @@ import cse332.datastructures.containers.Item;
  *    list: http://primes.utm.edu/lists/small/100000.txt 
  *    NOTE: Do NOT copy the whole list!
  */
-public class ChainingHashTableCopy<K, V> extends DeletelessDictionary<K, V>{
+public class ChainingHashTableChangedHashFunction<K, V> extends DeletelessDictionary<K, V>{
     private final Supplier<MoveToFrontList<K, V>> newChain;  
     private double loadFactor;
-    private MoveToFrontList[] array;
+    private MoveToFrontList<K,V>[] array;
     private final int[] sizes = {17, 37, 79, 163, 331, 673, 1361, 2729, 5471, 10949, 21911, 43853, 87719, 175447, 350899, 701819};
     private int starting;
     private double count;
     private int counter;
     private int spaceCounter;
-    //long steps;
+    private int steps;
     //private int iteratorStarter;
     
-    public ChainingHashTableCopy(Supplier<MoveToFrontList<K, V>> newChain) {
+    public ChainingHashTableChangedHashFunction(Supplier<MoveToFrontList<K, V>> newChain) {
         //////Systemerr.println("Constructor called");
         this.newChain = newChain;
         loadFactor = 0.0;
@@ -53,14 +54,19 @@ public class ChainingHashTableCopy<K, V> extends DeletelessDictionary<K, V>{
         return counter;
     }
     
-    @Override
     public V insert(K key, V value) {
         this.steps++;
         if(loadFactor >= 1) {
             this.array = resize(array);        
         } 
           int index = Math.abs(key.hashCode() % array.length);  
+          if(index > 5) {
+              index = 1;
+          } else {
+              index = 0;
+          }
           if(index >= 0) {
+              this.steps++;
               if(array[index] == null) {
                   array[index] = newChain.get();
               }
@@ -68,8 +74,6 @@ public class ChainingHashTableCopy<K, V> extends DeletelessDictionary<K, V>{
                   counter ++;
               }
               array[index].insert(key, value);
-              this.steps += ((MoveToFrontList)array[index]).getSteps();
-              resetCount(index);
               loadFactor = (++count) / array.length;
             return value;
           } else {
@@ -77,40 +81,38 @@ public class ChainingHashTableCopy<K, V> extends DeletelessDictionary<K, V>{
           }
     }
 
-    public void resetCount(int i) {
-        /*for(int i = 0; i < this.array.length; i ++) {
+    public void resetCount() {
+        this.steps++;
+        for(int i = 0; i < this.array.length; i ++) {
             array[i].steps = 0; 
-        }*/
-        array[i].steps = 0;
+        }
     }
-    
     public long totalSteps() {
+        this.steps++;
         long result = 0;
-        int i = 0;
-        while(array[i] != null) {
-            result += array[i].getSteps();
-            i++;
+        for(int i = 0; i < this.array.length; i ++) {
+            if(array[i] != null)
+                result += array[i].getSteps();
         }
         return result + this.steps;
     }
     
-    @Override
     public V find(K key) {
         this.steps++;
         
         int index = Math.abs(key.hashCode() % array.length);
-        
+        if(index > 5) {
+            index = 1;
+        } else {
+            index = 0;
+        }
         
         if(index >= 0) {
             if(array[index] == null) {
                 array[index] = newChain.get();
                 return null;
             }
-            V returnVal = (V)array[index].find(key);
-            
-            this.steps += ((MoveToFrontList)array[index]).getSteps();
-            resetCount(index);
-            return returnVal;
+            return array[index].find(key);
         } else {
             return null;
         }
@@ -121,7 +123,7 @@ public class ChainingHashTableCopy<K, V> extends DeletelessDictionary<K, V>{
         return spaceCounter;
     }
     
-    @Override
+
     public Iterator<Item<K, V>> iterator() {
         this.steps++;
         if(array[0] == null) {
@@ -140,7 +142,6 @@ public class ChainingHashTableCopy<K, V> extends DeletelessDictionary<K, V>{
                        iteratorStarter++;
                        
                         while(array[iteratorStarter ] == null) {
-                            steps++;
                               iteratorStarter ++;
                               if(iteratorStarter >= array.length) {
                                   return false;
@@ -172,31 +173,34 @@ public class ChainingHashTableCopy<K, V> extends DeletelessDictionary<K, V>{
     }
     
    
-    private MoveToFrontList<K,V>[] resize(MoveToFrontList<K, V> arrayChange[]) {
+    private MoveToFrontList<K,V>[] resize(MoveToFrontList<K,V> arrayChange[]) {
         this.steps++;
         for(int i = 0; i < arrayChange.length; i ++) {
-            this.steps++;
             if(arrayChange[i] == null || arrayChange[i].isEmpty()) {
                 spaceCounter++;
             }
         }
-        MoveToFrontList<K, V>[] changedDictionary;
+        MoveToFrontList<K,V>[] changedMoveToFrontList;
         if(starting > 15) {
-            changedDictionary = new MoveToFrontList[arrayChange.length * 2];
+            changedMoveToFrontList = new MoveToFrontList[arrayChange.length * 2];
         } else {
-           changedDictionary = new MoveToFrontList[sizes[starting]];
+           changedMoveToFrontList = new MoveToFrontList[sizes[starting]];
         }
         for(int i = 0; i < arrayChange.length; i++) {
-            this.steps++;
             if(arrayChange[i] != null) {
+                this.steps++;
                 for(Item<K,V> item : arrayChange[i]) {
-                    this.steps++;
-                    int index = Math.abs(item.key.hashCode() % changedDictionary.length);
+                    int index = Math.abs(item.key.hashCode() % changedMoveToFrontList.length);
+                    if(index > 5) {
+                        index = 1;
+                    } else {
+                        index = 0;
+                    }
                     if(index >= 0) {
-                        if(changedDictionary[index] == null) {
-                            changedDictionary[index] = newChain.get();
+                        if(changedMoveToFrontList[index] == null) {
+                            changedMoveToFrontList[index] = newChain.get();
                         }
-                        changedDictionary[index].insert(item.key, item.value);
+                        changedMoveToFrontList[index].insert(item.key, item.value);
                     } else {
                     return new MoveToFrontList[0];
                 }
@@ -204,7 +208,7 @@ public class ChainingHashTableCopy<K, V> extends DeletelessDictionary<K, V>{
         }
         }
         starting ++;
-        return changedDictionary;
+        return changedMoveToFrontList;
         
     }
     }

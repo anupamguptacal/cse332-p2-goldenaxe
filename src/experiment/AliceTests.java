@@ -2,6 +2,7 @@ package experiment;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.util.TreeSet;
 import java.util.function.Supplier;
 import cse332.misc.WordReader;
 import cse332.types.AlphabeticString;
@@ -29,12 +30,14 @@ public class AliceTests {
         HashTrieMap<Character, AlphabeticString, Integer> HTM = new HashTrieMap<>(AlphabeticString.class);
         
         String[] words = new String[27551];
+        TreeSet<String> uniqueWords = new TreeSet<String>();
         WordReader reader = new WordReader(new FileReader(CORPUS));
         
         int count = 0;
         while (reader.hasNext()) {
             String word = reader.next();
             words[count] = word;
+            uniqueWords.add(word);
             incCount(BST, word);
             incCount(AVL, word);
             incCount(CHT, word);
@@ -43,8 +46,12 @@ public class AliceTests {
         }
 
         QuickSort.sort(words);
-        for (int i = 0; i < 5000; i++) {
-            System.out.print(words[i] + " ");
+        //for (int i = 0; i < count; i++) {
+            //System.out.println(words[i] + " ");
+        //}
+        
+        for (String word : uniqueWords) {
+            System.out.println(word);
         }
         
         System.out.println(count);
