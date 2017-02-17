@@ -28,7 +28,6 @@ public class ChainingHashTable<K, V> extends DeletelessDictionary<K, V>{
     private int starting;
     private double count;
     private int counter;
-    //private int iteratorStarter;
     
     public ChainingHashTable(Supplier<Dictionary<K, V>> newChain) {
         this.newChain = newChain;
@@ -38,7 +37,6 @@ public class ChainingHashTable<K, V> extends DeletelessDictionary<K, V>{
             array[i] = newChain.get();
         }
         starting = 0;
-        //iteratorStarter = 0;
         count = 0.0;
         counter = 0;
     }
@@ -93,7 +91,6 @@ public class ChainingHashTable<K, V> extends DeletelessDictionary<K, V>{
         if(array[0] == null) {
             array[0] = newChain.get();
         }
-        //Iterator<Item<K,V>> iteratorConsideration = array[0].iterator();
         Iterator<Item<K,V>> it = new Iterator<Item<K,V>>() { 
             private int iteratorStarter = 0;
             
@@ -162,7 +159,7 @@ public class ChainingHashTable<K, V> extends DeletelessDictionary<K, V>{
         return changedDictionary;
         
     }
-    }
+}
 
 
  
